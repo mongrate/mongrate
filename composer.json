@@ -1,4 +1,12 @@
 {
+    "name": "amyboyd/mongrate",
+    "type": "library",
+    "description": "MongoDB migration tool for PHP",
+    "keywords": ["migrations", "mongodb", "database"],
+    "homepage": "https://github.com/amyboyd/mongrate",
+    "authors": [
+        { "name": "Amy Boyd", "email": "amy@amyboyd.co.uk" }
+    ],
     "require": {
         "php": ">=5.4.0",
         "symfony/yaml": "2.5.*",
