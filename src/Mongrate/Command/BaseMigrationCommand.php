@@ -33,11 +33,11 @@ class BaseMigrationCommand extends BaseCommand
         $this->className = $input->getArgument('name');
         $this->fullClassName = 'Mongrate\Migrations\\' . $this->className;
 
-        $file = 'migrations/' . $this->className . '.php';
+        $file = $this->params['migrations_directory'] . '/' . $this->className . '.php';
         if (file_exists($file)) {
             require_once $file;
         } else {
-            throw new MigrationDoesntExist($this->className);
+            throw new MigrationDoesntExist($this->className, $file);
         }
 
         $this->setupDatabaseConnection();
