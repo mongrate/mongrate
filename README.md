@@ -1,3 +1,14 @@
+Mongrate
+========
+
+A command-line tool for applying migrations to a MongoDB database. Migrations don't have to be linear, so you don't need to apply them in any order.
+
+Doctrine's [Mongo abstraction layer](https://github.com/doctrine/mongodb) is used to provide a clean database API. Mongrate does *not* use Doctrine's Mongo ODM - this is to avoid having to write mapping classes and to make it very quick to write migrations.
+
+At the moment, Mongrate does not support applying migrations to multiple databases.
+
+Example migrations can be found in `resources/examples/`.
+
 Installation
 ============
 
@@ -14,9 +25,15 @@ To generate a migration file, with the name "UpdateAddressStructure":
 
     ./mongrate.php generate-migration UpdateAddressStructure
 
-To migrate up:
+To toggle a migration (useful while writing your migration):
 
-    ./mongrate.php migrate 20140523_UpdateAddressStructure
+    ./mongrate.php toggle 20140523_UpdateAddressStructure
+
+To migrate up or down:
+
+    ./mongrate.php up 20140523_UpdateAddressStructure
+
+    ./mongrate.php down 20140523_UpdateAddressStructure
 
 Contributing
 ============
