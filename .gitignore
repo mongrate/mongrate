@@ -1,2 +1,3 @@
 vendor/
 migrations/
+config/parameters.yml

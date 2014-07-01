@@ -15,5 +15,6 @@ $loader->registerNamespaces(array(
 $loader->register();
 
 $app = new \Symfony\Component\Console\Application();
+$app->add(new \Mongrate\Command\MigrateCommand);
 $app->add(new \Mongrate\Command\GenerateMigrationCommand);
 $app->run();
