@@ -1,7 +1,9 @@
 {
     "require": {
+        "php": ">=5.4.0",
         "symfony/yaml": "2.5.*",
         "symfony/console": "2.5.*",
-        "symfony/class-loader": "2.5.*"
+        "symfony/class-loader": "2.5.*",
+        "doctrine/mongodb": "1.2.*@dev"
     }
 }
