@@ -1,0 +1,38 @@
+#!/bin/bash
+# Git pre-commit hook.
+# Runs PHP CS Fixer on PHP files.
+#
+# If you absolutely must commit without testing,
+# use: git commit --no-verify
+
+filenames=($(git diff --name-only HEAD))
+
+# Ensure php-cs-fixer is installed.
+which php-cs-fixer &> /dev/null
+if [ $? -ne 0 ];
+then
+  echo "Error: php-cs-fixer not found"
+  echo "Install instructions are at: https://github.com/fabpot/PHP-CS-Fixer"
+  exit 1
+fi
+
+# PHP CS Fixer.
+for i in "${filenames[@]}"
+do
+    if [[ $i =~ \.php$ ]];
+    then
+        echo "A .php file has changed - running PHP CS Fixer."
+
+        count=$( php-cs-fixer fix src --dry-run | wc -l )
+        if [[ $count != "0" ]];
+        then
+            echo "PHP CS Fixer had $count errors"
+            echo "Fix them by running 'php-cs-fixer fix src'"
+            php-cs-fixer fix src --dry-run -v
+            exit 1
+        fi
+
+        echo "PHP CS Fixer was fine"
+        break
+    fi
+done
