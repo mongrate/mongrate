@@ -1,0 +1,7 @@
+{
+    "require": {
+        "symfony/yaml": "2.5.*",
+        "symfony/console": "2.5.*",
+        "symfony/class-loader": "2.5.*"
+    }
+}
