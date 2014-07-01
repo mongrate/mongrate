@@ -30,8 +30,8 @@ class GenerateMigrationCommand extends BaseCommand
             '%class%' => $className
         ]);
 
-        if (!is_dir('migrations')) {
-            mkdir('migrations');
+        if (!is_dir($this->params['migrations_directory'])) {
+            mkdir($this->params['migrations_directory']);
         }
 
         file_put_contents($file, $templated);
