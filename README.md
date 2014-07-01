@@ -14,12 +14,16 @@ To generate a migration file, with the name "UpdateAddressStructure":
 
     ./mongrate.php generate-migration UpdateAddressStructure
 
+To migrate up:
+
+    ./mongrate.php migrate 20140523_UpdateAddressStructure
+
 Contributing
 ============
 
-Please submit pull requests on GitHub.
+Please submit pull requests [on GitHub](https://github.com/amyboyd/mongrate/pulls).
 
-Install PHP-CS-Fixer:
+Install [PHP-CS-Fixer](https://github.com/fabpot/PHP-CS-Fixer):
 
     sudo curl http://get.sensiolabs.org/php-cs-fixer.phar -o /usr/local/bin/php-cs-fixer
 
