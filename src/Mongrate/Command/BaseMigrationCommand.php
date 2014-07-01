@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrateCommand extends BaseCommand
+class BaseMigrationCommand extends BaseCommand
 {
     private $className;
 
@@ -24,9 +24,7 @@ class MigrateCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName('migrate')
-            ->setDescription('Migrate up or down')
-            ->addArgument('name', InputArgument::REQUIRED, 'The class name, formatted like "UpdateAddressStructure_20140523".');
+        $this->addArgument('name', InputArgument::REQUIRED, 'The class name, formatted like "UpdateAddressStructure_20140523".');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -43,14 +41,6 @@ class MigrateCommand extends BaseCommand
         }
 
         $this->setupDatabaseConnection();
-
-        $isAlreadyApplied = $this->isMigrationApplied();
-
-        if ($isAlreadyApplied === true) {
-            $this->migrate('down');
-        } else {
-            $this->migrate('up');
-        }
     }
 
     private function setupDatabaseConnection()
@@ -65,7 +55,7 @@ class MigrateCommand extends BaseCommand
      *
      * @param string $upOrDown
      */
-    private function migrate($upOrDown)
+    protected function migrate($upOrDown)
     {
         $fullClassName = $this->fullClassName;
         $migration = new $fullClassName();
@@ -84,6 +74,24 @@ class MigrateCommand extends BaseCommand
     }
 
     /**
+     * Check if the migration has been applied.
+     *
+     * @param boolean $isApplied True if applied, false if not.
+     */
+    protected function isMigrationApplied()
+    {
+        $collection = $this->getAppliedCollection();
+        $criteria = ['className' => $this->className];
+        $record = $collection->find($criteria)->getSingleResult();
+
+        if ($record === null) {
+            return false;
+        } else {
+            return (bool) $record['isApplied'];
+        }
+    }
+
+    /**
      * Update the database to record whether or not the migration has been applied.
      *
      * @param string  $migration
@@ -95,24 +103,6 @@ class MigrateCommand extends BaseCommand
         $criteria = ['className' => $this->className];
         $newObj = ['$set' => ['className' => $this->className, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
-    }
-
-    /**
-     * Check if the migration has been applied.
-     *
-     * @param boolean $isApplied True if applied, false if not.
-     */
-    private function isMigrationApplied()
-    {
-        $collection = $this->getAppliedCollection();
-        $criteria = ['className' => $this->className];
-        $record = $collection->find($criteria)->getSingleResult();
-
-        if ($record === null) {
-            return false;
-        } else {
-            return (bool) $record['isApplied'];
-        }
     }
 
     /**
