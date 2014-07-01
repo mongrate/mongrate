@@ -18,7 +18,7 @@ class GenerateMigrationCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $className = date('Ymd') . '_' . $input->getArgument('name');
+        $className = $input->getArgument('name') . '_' . date('Ymd');
         $file = 'migrations/' . $className . '.php';
 
         if (file_exists($file)) {
