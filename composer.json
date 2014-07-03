@@ -1,7 +1,7 @@
 {
     "name": "amyboyd/mongrate",
     "type": "library",
-    "description": "MongoDB migration tool for PHP",
+    "description": "A command-line tool for applying migrations to a MongoDB database",
     "keywords": ["migrations", "mongodb", "database"],
     "homepage": "https://github.com/amyboyd/mongrate",
     "authors": [

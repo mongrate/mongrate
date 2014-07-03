@@ -9,8 +9,14 @@ At the moment, Mongrate does not support applying migrations to multiple databas
 
 Example migrations can be found in `resources/examples/`.
 
+Symfony 2 users can use [MongrateBundle](https://github.com/amyboyd/mongrate-bundle) to integrate easily with a Symfony 2 project.
+
 Installation
 ============
+
+Mongrate is available [via Composer](https://packagist.org/packages/amyboyd/mongrate).
+
+Once you have downloaded Mongrate, run these commands:
 
     php composer.phar install
     chmod a+x mongrate.php
