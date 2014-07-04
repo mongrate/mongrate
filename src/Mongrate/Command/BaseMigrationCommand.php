@@ -46,7 +46,7 @@ class BaseMigrationCommand extends BaseCommand
     private function setupDatabaseConnection()
     {
         $config = new Configuration();
-        $conn = new Connection(null, [], $config);
+        $conn = new Connection($this->params['mongodb_server'], [], $config);
         $this->db = $conn->selectDatabase($this->params['mongodb_db']);
     }
 
