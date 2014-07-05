@@ -13,9 +13,13 @@ class GenerateMigrationCommandTest extends BaseCommandTest
         parent::setUp();
 
         $this->expectedFile = 'resources/examples/CreatedByTests_' . date('Ymd') . '.php';
+        $this->duplicateFile = 'resources/examples/DuplicateTest_' . date('Ymd') . '.php';
 
         if (file_exists($this->expectedFile)) {
             unlink($this->expectedFile);
+        }
+        if (file_exists($this->duplicateFile)) {
+            unlink($this->duplicateFile);
         }
     }
 
@@ -25,6 +29,9 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
         if (file_exists($this->expectedFile)) {
             unlink($this->expectedFile);
+        }
+        if (file_exists($this->duplicateFile)) {
+            unlink($this->duplicateFile);
         }
     }
 
@@ -46,5 +53,18 @@ class GenerateMigrationCommandTest extends BaseCommandTest
         $this->assertContains('class CreatedByTests_20140705' . "\n", $fileContent);
         $this->assertContains('public function up(Database $db)', $fileContent);
         $this->assertContains('public function down(Database $db)', $fileContent);
+    }
+
+    public function testExecute_duplicateMigrationName()
+    {
+        $application = new Application();
+        $application->add(new GenerateMigrationCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('generate-migration');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'DuplicateTest']);
+
+        $this->setExpectedException('Mongrate\Exception\DuplicateMigrationName', 'A migration with the name "DuplicateTest_');
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'DuplicateTest']);
     }
 }
