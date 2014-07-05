@@ -40,10 +40,12 @@ class UpdateAddressStructure
                 continue;
             }
 
+            $addressToUse = isset($company['address'][0]) ? $company['address'][0] : array_pop($company['address']);
+
             // Convert to object instead of an array of objects.
             $collection->update(
                 ['_id' => $company['_id']],
-                ['$set' => ['address' => array_pop($company['address'])]]
+                ['$set' => ['address' => $addressToUse]]
             );
         }
     }
