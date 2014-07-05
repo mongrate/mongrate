@@ -31,6 +31,10 @@ To generate a migration file, with the name "UpdateAddressStructure":
 
     ./mongrate generate-migration UpdateAddressStructure
 
+To list available migrations:
+
+    ./mongrate list-migrations
+
 To toggle a migration (useful while writing your migration):
 
     ./mongrate toggle 20140523_UpdateAddressStructure
