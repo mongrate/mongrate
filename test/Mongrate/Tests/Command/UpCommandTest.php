@@ -56,4 +56,18 @@ class UpCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName(), 'name' => 'Elvis']);
     }
+
+    public function testExecute_cannotApply()
+    {
+        $application = new Application();
+        $application->add(new UpCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('up');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+        $this->assertContains("Migrated up", $commandTester->getDisplay());
+
+        $this->setExpectedException('Mongrate\Exception\CannotApplyException', 'Cannot go up - the migration is already applied.');
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+    }
 }

@@ -55,4 +55,18 @@ class DownCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName(), 'name' => 'Elvis']);
     }
+
+    public function testExecute_cannotApply()
+    {
+        $application = new Application();
+        $application->add(new DownCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('down');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+        $this->assertContains("Migrated down", $commandTester->getDisplay());
+
+        $this->setExpectedException('Mongrate\Exception\CannotApplyException', 'Cannot go down - the migration is not applied yet.');
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+    }
 }
