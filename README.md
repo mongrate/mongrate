@@ -19,7 +19,7 @@ Mongrate is available [via Composer](https://packagist.org/packages/amyboyd/mong
 Once you have downloaded Mongrate, run these commands:
 
     php composer.phar install
-    chmod a+x mongrate.php
+    chmod a+x mongrate
     cp config/parameters.yml.dist config/parameters.yml
 
 Edit `config/parameters.yml` and enter your MongoDB connection information.
@@ -29,17 +29,17 @@ Usage
 
 To generate a migration file, with the name "UpdateAddressStructure":
 
-    ./mongrate.php generate-migration UpdateAddressStructure
+    ./mongrate generate-migration UpdateAddressStructure
 
 To toggle a migration (useful while writing your migration):
 
-    ./mongrate.php toggle 20140523_UpdateAddressStructure
+    ./mongrate toggle 20140523_UpdateAddressStructure
 
 To migrate up or down:
 
-    ./mongrate.php up 20140523_UpdateAddressStructure
+    ./mongrate up 20140523_UpdateAddressStructure
 
-    ./mongrate.php down 20140523_UpdateAddressStructure
+    ./mongrate down 20140523_UpdateAddressStructure
 
 Contributing
 ============
