@@ -58,3 +58,5 @@ Install the Git pre-commit hook:
 
     ln -s ../../resources/pre-commit .git/hooks/pre-commit
     chmod a+x .git/hooks/pre-commit
+
+To run the test suite, just run `phpunit`. The tests use a database called `mongrate_test` in your local MongoDB server.

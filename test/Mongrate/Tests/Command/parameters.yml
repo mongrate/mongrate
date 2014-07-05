@@ -1,0 +1,4 @@
+parameters:
+    mongodb_server: 'mongodb://localhost:27017'
+    mongodb_db: mongrate_test
+    migrations_directory: resources/examples
