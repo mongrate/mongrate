@@ -1,0 +1,4 @@
+#!/bin/bash
+cloc src config src test resources README.md *.json *.xml mongrate \
+    --exclude-list-file=resources/cloc-ignore.list \
+    --force-lang-def=resources/cloc-definitions.txt

@@ -1,0 +1,38 @@
+Bourne Again Shell
+    filter remove_matches ^\s*#
+    filter remove_inline #.*$
+    extension bash
+    extension command
+    script_exe bash
+    3rd_gen_scale 1.00
+    end_of_line_continuation \\$
+JSON
+    filter remove_inline #.*$
+    extension json
+    3rd_gen_scale 1.00
+Markdown
+    filter remove_inline #.*$
+    extension rst
+    extension md
+    3rd_gen_scale 1.00
+PHP
+    filter remove_matches ^\s*#
+    filter remove_matches ^\s*//
+    filter call_regexp_common C
+    filter remove_inline #.*$
+    filter remove_inline //.*$
+    extension php
+    script_exe php
+    3rd_gen_scale 1.00
+XML
+    filter remove_html_comments
+    filter call_regexp_common HTML
+    extension XML
+    extension xml
+    3rd_gen_scale 1.00
+YAML
+    filter remove_matches ^\s*#
+    filter remove_inline #.*$
+    extension yml
+    extension yml.dist
+    3rd_gen_scale 1.00
