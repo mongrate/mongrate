@@ -22,10 +22,11 @@ class ListCommand extends BaseCommand
         $iterator = new \DirectoryIterator($this->params['migrations_directory']);
 
         foreach ($iterator as $file) {
-            if (substr($file, -4) !== '.php') {
+            $file = (string) $file;
+            if ($file === '.'|| $file === '..') {
                 continue;
             }
-            $output->writeln('<comment>' . substr($file, 0, -4) . '</comment>');
+            $output->writeln('<comment>' . $file . '</comment>');
         }
     }
 }

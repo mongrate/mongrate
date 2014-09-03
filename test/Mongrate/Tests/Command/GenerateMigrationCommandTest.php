@@ -12,26 +12,28 @@ class GenerateMigrationCommandTest extends BaseCommandTest
     {
         parent::setUp();
 
-        $this->expectedFile = 'resources/examples/CreatedByTests_' . date('Ymd') . '.php';
-        $this->duplicateFile = 'resources/examples/DuplicateTest_' . date('Ymd') . '.php';
+        $this->expectedFile = 'resources/examples/CreatedByTests_' . date('Ymd') . '/Migration.php';
+        $this->duplicateFile = 'resources/examples/DuplicateTest_' . date('Ymd') . '/Migration.php';
 
-        if (file_exists($this->expectedFile)) {
-            unlink($this->expectedFile);
-        }
-        if (file_exists($this->duplicateFile)) {
-            unlink($this->duplicateFile);
-        }
+        $this->deleteTestFiles();
     }
 
     public function tearDown()
     {
         parent::tearDown();
 
+        $this->deleteTestFiles();
+    }
+
+    private function deleteTestFiles()
+    {
         if (file_exists($this->expectedFile)) {
             unlink($this->expectedFile);
+            rmdir(dirname($this->expectedFile));
         }
         if (file_exists($this->duplicateFile)) {
             unlink($this->duplicateFile);
+            rmdir(dirname($this->duplicateFile));
         }
     }
 
