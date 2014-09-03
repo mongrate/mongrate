@@ -50,7 +50,7 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
         $fileContent = file_get_contents($this->expectedFile);
         $this->assertContains('namespace Mongrate\Migrations;' . "\n", $fileContent);
-        $this->assertContains('class CreatedByTests_20140705' . "\n", $fileContent);
+        $this->assertContains('class CreatedByTests_' . date('Ymd') . "\n", $fileContent);
         $this->assertContains('public function up(Database $db)', $fileContent);
         $this->assertContains('public function down(Database $db)', $fileContent);
     }
