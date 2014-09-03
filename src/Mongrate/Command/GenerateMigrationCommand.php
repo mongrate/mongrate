@@ -19,7 +19,7 @@ class GenerateMigrationCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $className = $input->getArgument('name') . '_' . date('Ymd');
-        $file = $this->params['migrations_directory'] . '/' . $className . '.php';
+        $file = $this->getMigrationClassFileFromClassName($className);
 
         if (file_exists($file)) {
             throw new DuplicateMigrationName($className);
