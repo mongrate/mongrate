@@ -1,7 +1,7 @@
 Mongrate
 ========
 
-A command-line tool for applying migrations to a MongoDB database. Migrations don't have to be linear, so you don't need to apply them in any order.
+A command-line tool for applying migrations to a MongoDB database. Migrations are non-linear, and can be tested by writing simple YML files.
 
 Doctrine's [Mongo abstraction layer](https://github.com/doctrine/mongodb) is used to provide a clean database API. Mongrate does *not* use Doctrine's Mongo ODM - this is to avoid having to write mapping classes and to make it very quick to write migrations.
 
@@ -45,6 +45,10 @@ To migrate up or down:
 
     ./mongrate down 20140523_UpdateAddressStructure
 
+To verify a migration with it's YML test files:
+
+    ./mongrate test 20140523_UpdateAddressStructure (up|down|empty)
+
 Contributing
 ============
 
@@ -65,6 +69,8 @@ Changelog
 =========
 
 **1.2**
+
+* Feature: Write tests for your migrations in YML format. See `resources/examples/UpdateAddressStructure` for an example. Run the test with `./mongrate test UpdateAddressStructure`
 
 * The structure of the migrations directory has changed to allow future features. To update your migrations directory, run this (change `mv` to `git mv` if your migrations are in a Git reposistory):
 

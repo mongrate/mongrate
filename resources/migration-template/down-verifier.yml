@@ -1,0 +1,7 @@
+# To test your migration going 'down', run:
+# ./mongrate test %class% down
+
+CollectionName:
+    -
+        # Write what you expect the objects from 'down-input.yml' to look like after the migration.
+        x: y

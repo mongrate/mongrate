@@ -15,7 +15,14 @@ class UpdateAddressStructure
 {
     use MigrationHelper;
 
-    private $arrayIndexesThatIndicateMigrated = ['streetFirstLine', 'streetSecondLine', 'city', 'country', 'postcode', 'state'];
+    private $arrayIndexesThatIndicateMigrated = [
+        'streetFirstLine',
+        'streetSecondLine',
+        'city',
+        'country',
+        'postcode',
+        'state',
+    ];
 
     public function up(Database $db)
     {

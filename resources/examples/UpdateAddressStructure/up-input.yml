@@ -1,0 +1,23 @@
+Company:
+    -
+        # This company's address is in the old array format, and should be converted
+        # to the new single object format.
+        name: Twogether
+        address:
+            -
+                streetFirstLine: Marlow Place
+                city: Marlow
+                country: GB
+            -
+                streetFirstLine: Watermead
+                city: Aylesbury
+                country: GB
+    -
+        # This company's address is already in the new single object format, so it
+        # should not be changed.
+        name: Bunny
+        address:
+            streetFirstLine: Lena Gardens
+            streetSecondLine: Hammersmith
+            city: London
+            country: GB

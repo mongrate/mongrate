@@ -1,0 +1,14 @@
+# To test your migration going 'down', run:
+# ./mongrate test %class% down
+
+CollectionName:
+    -
+        # Add an object for CollectionName.
+        x: yyy
+    -
+        # Add another object for CollectionName.
+        x: yyy
+
+Collection2:
+    -
+        z: zzz

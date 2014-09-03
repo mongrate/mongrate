@@ -20,3 +20,4 @@ $app->add(new \Mongrate\Command\UpCommand);
 $app->add(new \Mongrate\Command\DownCommand);
 $app->add(new \Mongrate\Command\GenerateMigrationCommand);
 $app->add(new \Mongrate\Command\ListCommand);
+$app->add(new \Mongrate\Command\TestMigrationCommand);

@@ -1,0 +1,7 @@
+# To test your migration going 'up', run:
+# ./mongrate test %class% up
+
+CollectionName:
+    -
+        # Write what you expect the objects from 'up-input.yml' to look like after the migration.
+        x: yyy

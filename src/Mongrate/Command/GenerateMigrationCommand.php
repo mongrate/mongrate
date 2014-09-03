@@ -19,23 +19,28 @@ class GenerateMigrationCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $className = $input->getArgument('name') . '_' . date('Ymd');
-        $file = $this->getMigrationClassFileFromClassName($className);
+        $targetDirectory = dirname($this->getMigrationClassFileFromClassName($className));
 
-        if (file_exists($file)) {
+        if (is_dir($targetDirectory)) {
             throw new DuplicateMigrationName($className);
+        } else {
+            mkdir($targetDirectory, 0766, true);
         }
 
-        $template = file_get_contents('resources/MigrationTemplate.php');
-        $templated = strtr($template, [
-            '%class%' => $className
-        ]);
+        $iterator = new \DirectoryIterator('resources/migration-template/');
 
-        if (!is_dir(dirname($file))) {
-            mkdir(dirname($file), 0766, true);
+        foreach ($iterator as $file) {
+            if ($file->getFileName() === '.'|| $file->getFileName() === '..') {
+                continue;
+            }
+
+            $template = file_get_contents($file->getPathName());
+            $templated = strtr($template, [
+                '%class%' => $className
+            ]);
+            file_put_contents($targetDirectory . '/' . $file->getFileName(), $templated);
         }
 
-        file_put_contents($file, $templated);
-
-        $output->writeln('<info>Generated migration file</info> <comment>' . $file . '</comment>');
+        $output->writeln('<info>Generated migration file and YML templates in ' . $targetDirectory  . '</info>');
     }
 }

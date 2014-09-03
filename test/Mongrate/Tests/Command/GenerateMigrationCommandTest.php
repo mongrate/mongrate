@@ -27,13 +27,11 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
     private function deleteTestFiles()
     {
-        if (file_exists($this->expectedFile)) {
-            unlink($this->expectedFile);
-            rmdir(dirname($this->expectedFile));
+        if (is_dir(dirname($this->expectedFile))) {
+            exec('rm -fr ' . dirname($this->expectedFile));
         }
-        if (file_exists($this->duplicateFile)) {
-            unlink($this->duplicateFile);
-            rmdir(dirname($this->duplicateFile));
+        if (is_dir(dirname($this->duplicateFile))) {
+            exec('rm -fr ' . dirname($this->duplicateFile));
         }
     }
 
@@ -45,7 +43,7 @@ class GenerateMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName(), 'name' => 'CreatedByTests']);
-        $this->assertEquals('Generated migration file ' . $this->expectedFile . "\n",
+        $this->assertEquals('Generated migration file and YML templates in resources/examples/CreatedByTests_' . date('Ymd') . "\n",
             $commandTester->getDisplay());
 
         $this->assertFileExists($this->expectedFile);
@@ -68,5 +66,7 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
         $this->setExpectedException('Mongrate\Exception\DuplicateMigrationName', 'A migration with the name "DuplicateTest_');
         $commandTester->execute(['command' => $command->getName(), 'name' => 'DuplicateTest']);
+
+        $this->assertFileNotExists($this->duplicateFile);
     }
 }

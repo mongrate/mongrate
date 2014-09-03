@@ -7,7 +7,7 @@ use Mongrate\Migration\Migration as MigrationHelper;
 use Doctrine\MongoDB\Database;
 
 /**
- *
+ * Test this migration against the .yml files with `./mongrate test %class%`
  */
 class %class%
 {

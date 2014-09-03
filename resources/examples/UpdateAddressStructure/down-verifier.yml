@@ -1,0 +1,16 @@
+Company:
+    -
+        name: Twogether
+        address:
+            -
+                streetFirstLine: Marlow Place
+                city: Marlow
+                country: GB
+    -
+        name: Bunny
+        address:
+            -
+                streetFirstLine: Lena Gardens
+                streetSecondLine: Hammersmith
+                city: London
+                country: GB

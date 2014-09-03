@@ -1,0 +1,14 @@
+# To test your migration going 'up', run:
+# ./mongrate test %class% up
+
+CollectionName:
+    -
+        # Add an object for CollectionName.
+        x: y
+    -
+        # Add another object for CollectionName.
+        x: y
+
+Collection2:
+    -
+        z: z
