@@ -25,4 +25,9 @@ class BaseCommand extends Command
             $this->params = $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
         }
     }
+
+    protected function getMigrationClassFileFromClassName($className)
+    {
+        return $this->params['migrations_directory'] . '/' . $className . '.php';
+    }
 }
