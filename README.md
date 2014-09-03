@@ -60,3 +60,16 @@ Install the Git pre-commit hook:
     chmod a+x .git/hooks/pre-commit
 
 To run the test suite, just run `phpunit`. The tests use a database called `mongrate_test` in your local MongoDB server.
+
+Changelog
+=========
+
+**1.2**
+
+* The structure of the migrations directory has changed to allow future features. To update your migrations directory, run this (change `mv` to `git mv` if your migrations are in a Git reposistory):
+
+        for i in $(ls migrations/*.php); do \
+            dir=`sed 's/\.php//' <<< $i`; \
+            mkdir $dir; \
+            mv $i $dir/Migration.php; \
+        done

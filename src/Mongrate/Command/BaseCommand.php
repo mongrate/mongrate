@@ -28,6 +28,6 @@ class BaseCommand extends Command
 
     protected function getMigrationClassFileFromClassName($className)
     {
-        return $this->params['migrations_directory'] . '/' . $className . '.php';
+        return $this->params['migrations_directory'] . '/' . $className . '/Migration.php';
     }
 }
