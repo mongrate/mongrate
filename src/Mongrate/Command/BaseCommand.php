@@ -24,6 +24,10 @@ class BaseCommand extends Command
             $yaml = new Parser();
             $this->params = $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
         }
+
+        // Trim trailing slashes so this can be configured with or without trailing slashes without
+        // it affecting anything.
+        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
     }
 
     protected function getMigrationClassFileFromClassName($className)
