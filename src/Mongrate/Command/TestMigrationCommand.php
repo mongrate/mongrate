@@ -132,6 +132,10 @@ class TestMigrationCommand extends BaseCommand
         if (is_string($object) || is_int($object) || is_bool($object) || is_float($object)) {
             return $object;
         } elseif (is_array($object)) {
+            if (count($object) === 0) {
+                return [];
+            }
+
             // If the array uses numeric keys, keep the keys intact.
             // If the array uses string keys, sort them alphabetically.
             if (array_keys($object)[0] !== 0) {

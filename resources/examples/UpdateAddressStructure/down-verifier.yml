@@ -6,6 +6,7 @@ Company:
                 streetFirstLine: Marlow Place
                 city: Marlow
                 country: GB
+        history: []
     -
         name: Bunny
         address:
@@ -14,3 +15,4 @@ Company:
                 streetSecondLine: Hammersmith
                 city: London
                 country: GB
+        history: []

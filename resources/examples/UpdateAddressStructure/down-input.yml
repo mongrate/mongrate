@@ -7,6 +7,7 @@ Company:
             streetFirstLine: Marlow Place
             city: Marlow
             country: GB
+        history: []
     -
         # This company's address is already in the old array format, so it
         # should not be changed.
@@ -17,3 +18,4 @@ Company:
                 streetSecondLine: Hammersmith
                 city: London
                 country: GB
+        history: []
