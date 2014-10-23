@@ -2,8 +2,6 @@
 
 namespace Mongrate\Command;
 
-use Doctrine\MongoDB\Configuration;
-use Doctrine\MongoDB\Connection;
 use Mongrate\Exception\MigrationDoesntExist;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,16 +9,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BaseMigrationCommand extends BaseCommand
 {
-    private $className;
+    protected $className;
 
-    private $fullClassName;
+    protected $fullClassName;
 
-    /**
-     * @var \Doctrine\MongoDB\Database
-     */
-    private $db;
-
-    private $output;
+    protected $output;
 
     protected function configure()
     {
@@ -39,15 +32,6 @@ class BaseMigrationCommand extends BaseCommand
         } else {
             throw new MigrationDoesntExist($this->className, $file);
         }
-
-        $this->setupDatabaseConnection();
-    }
-
-    private function setupDatabaseConnection()
-    {
-        $config = new Configuration();
-        $conn = new Connection($this->params['mongodb_server'], [], $config);
-        $this->db = $conn->selectDatabase($this->params['mongodb_db']);
     }
 
     /**
@@ -74,24 +58,6 @@ class BaseMigrationCommand extends BaseCommand
     }
 
     /**
-     * Check if the migration has been applied.
-     *
-     * @param boolean $isApplied True if applied, false if not.
-     */
-    protected function isMigrationApplied()
-    {
-        $collection = $this->getAppliedCollection();
-        $criteria = ['className' => $this->className];
-        $record = $collection->find($criteria)->getSingleResult();
-
-        if ($record === null) {
-            return false;
-        } else {
-            return (bool) $record['isApplied'];
-        }
-    }
-
-    /**
      * Update the database to record whether or not the migration has been applied.
      *
      * @param string  $migration
@@ -103,15 +69,5 @@ class BaseMigrationCommand extends BaseCommand
         $criteria = ['className' => $this->className];
         $newObj = ['$set' => ['className' => $this->className, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
-    }
-
-    /**
-     * Update the database to record whether or not the migration has been applied.
-     *
-     * @return \Doctrine\MongoDB\Collection
-     */
-    private function getAppliedCollection()
-    {
-        return $this->db->selectCollection('MongrateMigrations');
     }
 }

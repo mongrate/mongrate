@@ -19,7 +19,7 @@ class UpCommand extends BaseMigrationCommand
     {
         parent::execute($input, $output);
 
-        $isAlreadyApplied = $this->isMigrationApplied();
+        $isAlreadyApplied = $this->isMigrationApplied($this->className);
 
         if ($isAlreadyApplied === true) {
             throw new CannotApplyException('Cannot go up - the migration is already applied.');

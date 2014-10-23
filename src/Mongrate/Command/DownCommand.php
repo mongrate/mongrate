@@ -19,7 +19,7 @@ class DownCommand extends BaseMigrationCommand
     {
         parent::execute($input, $output);
 
-        $isAlreadyApplied = $this->isMigrationApplied();
+        $isAlreadyApplied = $this->isMigrationApplied($this->className);
 
         if ($isAlreadyApplied === false) {
             throw new CannotApplyException('Cannot go down - the migration is not applied yet.');

@@ -19,7 +19,7 @@ class ToggleMigrationCommand extends BaseMigrationCommand
     {
         parent::execute($input, $output);
 
-        $isAlreadyApplied = $this->isMigrationApplied();
+        $isAlreadyApplied = $this->isMigrationApplied($this->className);
 
         if ($isAlreadyApplied === true) {
             $this->migrate('down');

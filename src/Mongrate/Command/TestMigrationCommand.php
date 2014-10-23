@@ -12,8 +12,6 @@ use Symfony\Component\Yaml\Parser;
 
 class TestMigrationCommand extends BaseCommand
 {
-    private $db;
-
     private $output;
 
     protected function configure()
