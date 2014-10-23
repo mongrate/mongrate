@@ -26,7 +26,10 @@ class ListCommand extends BaseCommand
             if ($file === '.'|| $file === '..') {
                 continue;
             }
-            $output->writeln('<comment>' . $file . '</comment>');
+
+            $isApplied = $this->isMigrationApplied($file);
+            $output->writeln('<comment>' . $file . '</comment> '
+                . ($isApplied ? '<info>applied</info>' : '<error>not applied</error>'));
         }
     }
 }
