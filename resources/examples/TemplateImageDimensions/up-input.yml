@@ -1,0 +1,37 @@
+# To test your migration going 'up' run:
+# ./mongrate test TemplateImageDimensions up
+
+Template:
+    -
+        id: aaaa
+        name: Email A
+        files:
+            -
+                # Non-image files should not get the width/height attributes added.
+                clientPath : email.html
+                fileSystemUrl : http://example.test/email.html
+            -
+                clientPath : images/sungard.jpg
+                fileSystemUrl : http://www.wearetwogether.com/images/icons/client-logo-active-sungard.png
+                attributes:
+                    # Even though these dimensions are wrong, they are already set, so should not
+                    # be changed.
+                    width: 1
+                    height: 2
+            -
+                clientPath : images/brocade.png
+                fileSystemUrl : http://www.wearetwogether.com/images/icons/client-logo-active-brocade.png
+                attributes:
+                    # Any exsting attributes should be kept.
+                    something: value
+
+    -
+        id: bbbb
+        name: Email B
+        files:
+            -
+                clientPath : images/intuit.png
+                fileSystemUrl : http://www.wearetwogether.com/images/icons/client-logo-active-intuit.png
+            -
+                clientPath : email.html
+                fileSystemUrl : http://example.test/email.html

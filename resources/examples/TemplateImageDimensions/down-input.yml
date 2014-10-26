@@ -1,0 +1,18 @@
+# To test your migration going 'down', run:
+# ./mongrate test TemplateImageDimensions down
+
+Template:
+    -
+        id: aaaa
+        name: Email A
+        files:
+            -
+                clientPath : image.jpg
+                fileSystemUrl : http://example.test/image.jpg
+                attributes:
+                    # These attributes should not be removed, i.e. the down migration
+                    # does nothing, because these attributes may come in useful,
+                    # and if the 'up' migration is run again, it will save the 'up' migration
+                    # having to get the width/height of the image again.
+                    width: 20
+                    height: 20
