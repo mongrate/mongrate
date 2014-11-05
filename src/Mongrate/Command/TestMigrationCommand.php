@@ -127,7 +127,7 @@ class TestMigrationCommand extends BaseCommand
 
     private function normalizeObject($object)
     {
-        if (is_string($object) || is_int($object) || is_bool($object) || is_float($object)) {
+        if (is_string($object) || is_int($object) || is_bool($object) || is_float($object) || is_null($object)) {
             return $object;
         } elseif (is_array($object)) {
             if (count($object) === 0) {
