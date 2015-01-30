@@ -18,7 +18,7 @@ class ListCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName()]);
 
-        $this->assertEquals("UpdateAddressStructure not applied\nTemplateImageDimensions not applied\n",
+        $this->assertEquals("TemplateImageDimensions not applied\nUpdateAddressStructure not applied\n",
             $commandTester->getDisplay());
     }
 }

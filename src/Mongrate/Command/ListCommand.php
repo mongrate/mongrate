@@ -20,6 +20,7 @@ class ListCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $iterator = new \DirectoryIterator($this->params['migrations_directory']);
+        $migrations = [];
 
         foreach ($iterator as $file) {
             $file = (string) $file;
@@ -27,9 +28,16 @@ class ListCommand extends BaseCommand
                 continue;
             }
 
-            $isApplied = $this->isMigrationApplied($file);
-            $output->writeln('<comment>' . $file . '</comment> '
-                . ($isApplied ? '<info>applied</info>' : '<error>not applied</error>'));
+            $migrations[] = ['file' => $file, 'isApplied' => $this->isMigrationApplied($file)];
+        }
+
+        usort($migrations, function($a, $b) {
+            return strcmp($a['file'], $b['file']);
+        });
+
+        foreach ($migrations as $migration) {
+            $output->writeln('<comment>' . $migration['file'] . '</comment> '
+                . ($migration['isApplied'] ? '<info>applied</info>' : '<error>not applied</error>'));
         }
     }
 }
