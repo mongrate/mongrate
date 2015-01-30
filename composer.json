@@ -9,6 +9,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
+        "ext-mongo": "*",
         "symfony/yaml": "2.5.*",
         "symfony/console": "2.5.*",
         "symfony/class-loader": "2.5.*",

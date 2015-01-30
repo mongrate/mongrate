@@ -1,6 +1,8 @@
 Mongrate
 ========
 
+[![Build Status](https://travis-ci.org/amyboyd/mongrate.svg?branch=master)](https://travis-ci.org/amyboyd/mongrate)
+
 A command-line tool for applying migrations to a MongoDB database. Migrations are non-linear, and can be tested by writing simple YML files.
 
 Doctrine's [Mongo abstraction layer](https://github.com/doctrine/mongodb) is used to provide a clean database API. Mongrate does *not* use Doctrine's Mongo ODM - this is to avoid having to write mapping classes and to make it very quick to write migrations.
