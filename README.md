@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/amyboyd/mongrate.png?label=ready&title=Ready)](https://waffle.io/amyboyd/mongrate)
 Mongrate
 ========
 
