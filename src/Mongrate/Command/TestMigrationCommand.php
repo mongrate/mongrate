@@ -14,6 +14,8 @@ class TestMigrationCommand extends BaseCommand
 {
     private $output;
 
+    private static $matchNativeMongoClass = '/^Mongo(Id|Code|Date|Regex|BinData|Int32|Int64|DBRef|MinKey|MaxKey|Timestamp)\((.*)\)$/';
+
     protected function configure()
     {
         $this->setName('test')
@@ -73,6 +75,7 @@ class TestMigrationCommand extends BaseCommand
             $collection->remove([]);
 
             foreach ($collectionFixtures as $i => $collectionFixture) {
+                $collectionFixture = array_map([$this, 'convertYmlStringToNativeMongoObjects'], $collectionFixture);
                 $collectionFixture['_orderInTestYamlFile'] = $i;
                 $collection->insert($collectionFixture);
             }
@@ -102,6 +105,8 @@ class TestMigrationCommand extends BaseCommand
 
         foreach ($verifier as $collectionName => $verifierObjects) {
             $collection = $this->db->selectCollection($collectionName);
+
+            $verifierObjects = array_map([$this, 'convertYmlStringToNativeMongoObjects'], $verifierObjects);
             $verifierObjects = $this->normalizeObject($verifierObjects);
             $verifierObjectsJson = json_encode($verifierObjects);
 
@@ -145,8 +150,33 @@ class TestMigrationCommand extends BaseCommand
             }
 
             return $object;
+        } elseif (is_object($object) && preg_match('/^Mongo/', get_class($object)) === 1) {
+            return $object;
         } else {
             throw new \InvalidArgumentException('Unexpected object type: ' . var_dump($object, true));
         }
+    }
+
+    /**
+     * Converts YML strings to native Mongo* objects. E.g. if a string is "MongoDate(123)", it will
+     * be converted to a MongoDate object representing the Unix time "123". If an array is given,
+     * this method is applied recursively to all of the array's values.
+     *
+     * @param  mixed $value
+     * @return mixed
+     */
+    private function convertYmlStringToNativeMongoObjects($value)
+    {
+        if (is_array($value)) {
+            return array_map([$this, 'convertYmlStringToNativeMongoObjects'], $value);
+        } else if (is_string($value)) {
+            if (preg_match(self::$matchNativeMongoClass, $value, $matches) === 1) {
+                $nativeMongoClass = 'Mongo' . $matches[1];
+                return new $nativeMongoClass($matches[2]);
+            }
+            return $value;
+        }
+
+        return $value;
     }
 }
