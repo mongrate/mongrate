@@ -65,4 +65,18 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName(), 'name' => 'Elvis']);
     }
+
+    public function testExecute_hasMongoObjectsInYml()
+    {
+        $application = new Application();
+        $application->add(new TestMigrationCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('test');
+        $commandTester = new CommandTester($command);
+
+        // First run should go up.
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'upOrDown' => 'up']);
+        $this->assertEquals("Testing DeleteOldLogs going up.\n"
+                . "Test passed.\n",
+            $commandTester->getDisplay());
+    }
 }

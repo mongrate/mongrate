@@ -1,0 +1,13 @@
+# To test your migration going 'up', run:
+# ./mongrate test DeleteOldLogs up
+
+Log:
+    -
+        info: 'Alice did something'
+        date: MongoDate(1369311194)
+    -
+        info: 'Bob did something'
+        date: MongoDate(1371039120)
+    -
+        info: 'Charlie did something'
+        date: MongoDate(1402549990)

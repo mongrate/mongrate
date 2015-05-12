@@ -1,0 +1,2 @@
+# The down migration has not been implemented for this migration, because it deletes date and is
+# not reversable.
