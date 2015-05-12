@@ -38,7 +38,7 @@ class TestMigrationCommandTest extends BaseCommandTest
             $commandTester->getDisplay());
     }
 
-    public function down()
+    public function testExecute_down()
     {
         $application = new Application();
         $application->add(new TestMigrationCommand(null, $this->parametersFromYmlFile));
