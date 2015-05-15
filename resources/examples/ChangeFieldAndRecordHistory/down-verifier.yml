@@ -1,0 +1,16 @@
+# To test your migration going 'down', run:
+# ./mongrate test ChangeFieldAndRecordHistory down
+
+Item:
+    -
+        vatTaxRate: 17.5
+        history:
+            -
+                info: "Changed VAT tax rate to 20%, from 17.5%."
+                date: MongoDate(123456)
+            -
+                info: "Changed VAT tax rate to 17.5%, from 20%."
+                date: $exists
+    -
+        # This one should not have history added, because it was already at 17.5%.
+        vatTaxRate: 17.5

@@ -18,7 +18,7 @@ class ListCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName()]);
 
-        $this->assertEquals("DeleteOldLogs not applied\nTemplateImageDimensions not applied\nUpdateAddressStructure not applied\n",
+        $this->assertEquals("ChangeFieldAndRecordHistory not applied\nDeleteOldLogs not applied\nTemplateImageDimensions not applied\nUpdateAddressStructure not applied\n",
             $commandTester->getDisplay());
     }
 }

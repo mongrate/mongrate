@@ -65,4 +65,10 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
         $this->runGoingUp('TemplateImageDimensions');
         $this->runGoingDown('TemplateImageDimensions');
     }
+
+    public function testExampleMigrationChangeFieldAndRecordHistory()
+    {
+        $this->runGoingUp('ChangeFieldAndRecordHistory');
+        $this->runGoingDown('ChangeFieldAndRecordHistory');
+    }
 }
