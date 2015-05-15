@@ -1,0 +1,14 @@
+# To test your migration going 'up', run:
+# ./mongrate test ChangeFieldAndRecordHistory up
+
+Item:
+    -
+        vatTaxRate: 17.5
+    -
+        vatTaxRate: 17.5
+        history:
+            -
+                info: 'Bla bla bla'
+                date: MongoDate(123456)
+    -
+        vatTaxRate: 20.0

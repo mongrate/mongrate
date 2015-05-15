@@ -117,7 +117,7 @@ class TestMigrationCommand extends BaseCommand
             $actualObjects = $this->normalizeObject($actualObjects);
             $actualObjectsJson = json_encode($actualObjects);
 
-            $isVerified = $actualObjectsJson === $verifierObjectsJson;
+            $isVerified = $this->areEqual($verifierObjects, $actualObjects);
             if ($isVerified) {
                 $this->output->writeln('<info>Test passed.</info>');
             } else {
@@ -178,5 +178,50 @@ class TestMigrationCommand extends BaseCommand
         }
 
         return $value;
+    }
+
+    /**
+     * Check if the two parameters are equal to each other.
+     *
+     * Supports the comparison of:
+     * - strings, integers, booleans, floats
+     * - null
+     * - arrays, which are checked for equality recursively.
+     * - MongoDate, MongoRegex, etc. objects.
+     * - $exists in the 'expected' value, which will only check that the equivalent actual value is
+     *   not null.
+     *
+     * @param  mixed   $expected
+     * @param  mixed   $actual
+     * @return boolean
+     */
+    private function areEqual($expected, $actual)
+    {
+        if (is_array($actual) && is_array($expected)) {
+            if (count($actual) !== count($expected)) {
+                return false;
+            }
+
+            if (array_keys($actual) !== array_keys($expected)) {
+                return false;
+            }
+
+            foreach ($actual as $actualKey => $actualValue) {
+                if (!$this->areEqual($expected[$actualKey], $actualValue)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (is_string($expected) && $expected === '$exists') {
+            return $actual !== null;
+        }
+
+        // Compare after applying `json_encode()` because we are interested in the JSON
+        // representation that will be put into MongoDB, not whether two PHP objects have the same
+        // reference (two identical MongoDate objects would have different references, for example).
+        return json_encode($expected) === json_encode($actual);
     }
 }
