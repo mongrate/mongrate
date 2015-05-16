@@ -2,3 +2,4 @@ vendor/
 migrations/
 config/parameters.yml
 composer.lock
+/bin/
