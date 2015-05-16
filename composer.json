@@ -13,6 +13,7 @@
         "symfony/yaml": "~2.3",
         "symfony/console": "~2.3",
         "symfony/class-loader": "~2.3",
+        "doctrine/common": "~2.2",
         "doctrine/mongodb": "1.1.*"
     }
 }
