@@ -10,9 +10,10 @@
     "require": {
         "php": ">=5.4.0",
         "ext-mongo": "*",
-        "symfony/yaml": "2.5.*",
-        "symfony/console": "2.5.*",
-        "symfony/class-loader": "2.5.*",
+        "symfony/yaml": "~2.3",
+        "symfony/console": "~2.3",
+        "symfony/class-loader": "~2.3",
+        "doctrine/common": "~2.2",
         "doctrine/mongodb": "1.1.*"
     }
 }
