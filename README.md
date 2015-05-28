@@ -20,9 +20,11 @@ Mongrate is available [via Composer](https://packagist.org/packages/amyboyd/mong
 
 Once you have downloaded Mongrate, run these commands:
 
-    php composer.phar install
-    chmod a+x mongrate
-    cp config/parameters.yml.dist config/parameters.yml
+```sh
+php composer.phar install
+chmod a+x mongrate
+cp config/parameters.yml.dist config/parameters.yml
+```
 
 Edit `config/parameters.yml` and enter your MongoDB connection information.
 
@@ -31,38 +33,50 @@ Usage
 
 To generate a migration file, with the name "UpdateAddressStructure":
 
-    ./mongrate generate-migration UpdateAddressStructure
+```
+./mongrate generate-migration UpdateAddressStructure
+```sh
 
 To list available migrations:
 
-    ./mongrate list-migrations
+```sh
+./mongrate list-migrations
+```
 
 To toggle a migration (useful while writing your migration):
 
-    ./mongrate toggle 20140523_UpdateAddressStructure
+```sh
+./mongrate toggle 20140523_UpdateAddressStructure
+```
 
 To migrate up or down:
 
-    ./mongrate up 20140523_UpdateAddressStructure
+```sh
+./mongrate up 20140523_UpdateAddressStructure
+```
 
-    ./mongrate down 20140523_UpdateAddressStructure
+```sh
+./mongrate down 20140523_UpdateAddressStructure
+```
 
 To verify a migration with it's YML test files:
-
-    ./mongrate test 20140523_UpdateAddressStructure (up|down|empty)
+```sh
+./mongrate test 20140523_UpdateAddressStructure (up|down|empty)
+```
 
 Contributing
 ============
 
 Please submit pull requests [on GitHub](https://github.com/amyboyd/mongrate/pulls).
 
-Install [PHP-CS-Fixer](https://github.com/fabpot/PHP-CS-Fixer):
+Project follow PSR2 standard. 
 
-    sudo curl http://get.sensiolabs.org/php-cs-fixer.phar -o /usr/local/bin/php-cs-fixer
+When you do `composer install` it should set a `git-precomit` to help you follow the standards.
 
-Install the Git pre-commit hook:
+Install the Git pre-commit hook manually:
 
-    ln -s ../../resources/pre-commit .git/hooks/pre-commit
-    chmod a+x .git/hooks/pre-commit
+```sh
+bash contrib/setup.sh
+```
 
 To run the test suite, just run `phpunit`. The tests use a database called `mongrate_test` in your local MongoDB server.
