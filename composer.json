@@ -7,6 +7,11 @@
     "authors": [
         { "name": "Amy Boyd", "email": "amy@amyboyd.co.uk" }
     ],
+    "autoload": {
+        "psr-0": {
+            "Mongrate\\": "src/"
+        }
+    },
     "require": {
         "php": ">=5.4.0",
         "ext-mongo": "*",
