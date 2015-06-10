@@ -10,7 +10,8 @@ class DownCommand extends BaseMigrationCommand
 {
     protected function configure()
     {
-        $this->setName('down');
+        $this->setName('down')
+            ->setDescription('Revert your migration - execute the down method of your migration.');
 
         parent::configure();
     }
