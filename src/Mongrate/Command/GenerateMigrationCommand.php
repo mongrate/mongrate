@@ -27,7 +27,7 @@ class GenerateMigrationCommand extends BaseCommand
             mkdir($targetDirectory, 0766, true);
         }
 
-        $iterator = new \DirectoryIterator('resources/migration-template/');
+        $iterator = new \DirectoryIterator(__DIR__ . '/../../../resources/migration-template/');
 
         foreach ($iterator as $file) {
             if ($file->getFileName() === '.'|| $file->getFileName() === '..') {
