@@ -18,4 +18,8 @@ before_script:
     - composer self-update
     - composer update --prefer-source $PREFER_LOWEST 
 
-script: bin/phpunit
+script: bin/phpunit --coverage-clover=coverage.clover
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
