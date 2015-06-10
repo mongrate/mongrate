@@ -2,6 +2,7 @@ Mongrate
 ========
 
 [![Build Status](https://travis-ci.org/amyboyd/mongrate.svg?branch=master)](https://travis-ci.org/amyboyd/mongrate)
+[![Code Coverage](https://scrutinizer-ci.com/g/amyboyd/mongrate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/amyboyd/mongrate/?branch=master)
 
 A command-line tool for applying migrations to a MongoDB database. Migrations are non-linear, and can be tested by writing simple YML files.
 
