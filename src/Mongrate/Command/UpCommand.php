@@ -10,7 +10,9 @@ class UpCommand extends BaseMigrationCommand
 {
     protected function configure()
     {
-        $this->setName('up');
+        $this->setName('up')
+            ->setDescription('Apply your migration - execute `up` method of your migration.');
+        ;
 
         parent::configure();
     }
