@@ -17,6 +17,7 @@ Symfony 2 users can use [MongrateBundle](https://github.com/amyboyd/mongrate-bun
 Table of content:
 
 * [Installation](#installation)
+* [Configuration](#configuration)
 * [Usage](#usage)
 	* [Generate Migration](#generate-migration)
 	* [List Migrations](#list-migrations)
@@ -43,6 +44,25 @@ cp config/parameters.yml.dist config/parameters.yml
 ```
 
 Edit `config/parameters.yml` and enter your MongoDB connection information.
+
+## Configuration
+
+Your `parameters.yml` you should have something similar to this.
+
+```yml
+parameters:
+    mongodb_server: 'mongodb://localhost:27017'
+    mongodb_db: my_db
+    migrations_directory: migrations
+```
+
+| Parameter     | Required  | Description  |
+| ------------- |:-------------:| :-----|
+|  mongodb_server  | required | URI for your mongodb server. |
+|  mongodb_db  | required | Database name. |
+|  migrations_directory  | required | The directory where your migration files are to be kept. |
+
+*Note:* Don't add a trailing slash in `migrations_directory` parameter value.
 
 Usage
 =====
