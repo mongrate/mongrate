@@ -39,11 +39,11 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
         $this->runGoingUpOrDown($migrationName, 'down');
     }
 
-    private function runGoingUpOrDown($migrationName, $upOrDown)
+    private function runGoingUpOrDown($migrationName, $direction)
     {
-        $this->commandTester->execute(['command' => 'test', 'name' => $migrationName, 'upOrDown' => $upOrDown]);
+        $this->commandTester->execute(['command' => 'test', 'name' => $migrationName, 'direction' => $direction]);
         $this->assertEquals(
-            "Testing {$migrationName} going {$upOrDown}.\nTest passed.\n",
+            "Testing {$migrationName} going {$direction}.\nTest passed.\n",
             $this->commandTester->getDisplay()
         );
     }

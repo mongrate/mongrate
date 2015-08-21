@@ -25,7 +25,7 @@ class TestMigrationCommand extends BaseCommand
         $this->setName('test')
             ->setDescription('Test a migration up and down.')
             ->addArgument('name', InputArgument::REQUIRED, 'The class name, formatted like "UpdateAddressStructure_20140523".')
-            ->addArgument('upOrDown', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.')
+            ->addArgument('direction', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.')
             ->addOption('pretty', null, InputArgument::OPTIONAL, 'Whether to pretty-print the output if there is an error.', false)
         ;
 
@@ -38,8 +38,8 @@ class TestMigrationCommand extends BaseCommand
         $this->output = $output;
 
         $name = new Name($input->getArgument('name'));
-        $direction = $input->getArgument('upOrDown')
-            ? new Direction($input->getArgument('upOrDown'))
+        $direction = $input->getArgument('direction')
+            ? new Direction($input->getArgument('direction'))
             : null;
 
         $classFile = $this->getMigrationClassFileFromName($name);

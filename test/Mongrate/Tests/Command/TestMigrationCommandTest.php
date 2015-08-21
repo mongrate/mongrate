@@ -34,7 +34,7 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'upOrDown' => 'up']);
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'up']);
         $this->assertEquals(
             "Testing UpdateAddressStructure going up.\n"
             . "Test passed.\n",
@@ -50,7 +50,7 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'upOrDown' => 'down']);
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'down']);
         $this->assertEquals(
             "Testing UpdateAddressStructure going down.\n"
             . "Test passed.\n",
@@ -80,7 +80,7 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'upOrDown' => 'up']);
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'direction' => 'up']);
         $this->assertEquals(
             "Testing DeleteOldLogs going up.\n"
             . "Test passed.\n",
