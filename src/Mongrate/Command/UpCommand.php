@@ -5,6 +5,7 @@ namespace Mongrate\Command;
 use Mongrate\Exception\CannotApplyException;
 use Mongrate\Migration\Direction;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UpCommand extends BaseMigrationCommand
@@ -12,7 +13,14 @@ class UpCommand extends BaseMigrationCommand
     protected function configure()
     {
         $this->setName('up')
-            ->setDescription('Apply your migration - execute `up` method of your migration.');
+            ->setDescription('Apply your migration - execute `up` method of your migration.')
+            ->addOption(
+                'force',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'Force going up, even if the migration has already been applied.',
+                false
+            )
         ;
 
         parent::configure();
@@ -24,7 +32,9 @@ class UpCommand extends BaseMigrationCommand
 
         $isAlreadyApplied = $this->isMigrationApplied($this->className);
 
-        if ($isAlreadyApplied === true) {
+        $force = $input->getOption('force');
+
+        if ($isAlreadyApplied === true && !$force) {
             throw new CannotApplyException('Cannot go up - the migration is already applied.');
         } else {
             $this->migrate(Direction::up());

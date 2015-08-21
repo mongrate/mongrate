@@ -34,9 +34,11 @@ class UpCommandTest extends BaseCommandTest
 
         // Run the command.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Migrating up... UpdateAddressStructure\n"
-                ."Migrated up\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Migrating up... UpdateAddressStructure\n"
+            ."Migrated up\n",
+            $commandTester->getDisplay()
+        );
 
         // Now only has the first address at the root of 'address'.
         $this->assertArrayHasKey('streetFirstLine', $collection->findOne(['name' => 'Amy'])['address']);
@@ -69,5 +71,19 @@ class UpCommandTest extends BaseCommandTest
 
         $this->setExpectedException('Mongrate\Exception\CannotApplyException', 'Cannot go up - the migration is already applied.');
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+    }
+
+    public function testExecute_forceApply()
+    {
+        $application = new Application();
+        $application->add(new UpCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('up');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+        $this->assertContains("Migrated up", $commandTester->getDisplay());
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', '--force' => true]);
+        $this->assertContains("Migrated up", $commandTester->getDisplay());
     }
 }

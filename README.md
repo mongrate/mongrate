@@ -96,7 +96,7 @@ To toggle a migration (useful while writing your migration):
 To migrate up:
 
 ```sh
-./mongrate up 20140523_UpdateAddressStructure
+./mongrate up 20140523_UpdateAddressStructure [--force]
 ```
 
 ## Migrate down
@@ -104,7 +104,7 @@ To migrate up:
 To migrate down:
 
 ```sh
-./mongrate down 20140523_UpdateAddressStructure
+./mongrate down 20140523_UpdateAddressStructure [--force]
 ```
 
 ## Test Migration
