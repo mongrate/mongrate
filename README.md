@@ -1,7 +1,7 @@
 Mongrate
 ========
 
-[![Build Status](https://travis-ci.org/amyboyd/mongrate.svg?branch=master)](https://travis-ci.org/amyboyd/mongrate)
+[![Build Status](https://travis-ci.org/mongrate/mongrate.svg?branch=master)](https://travis-ci.org/mongrate/mongrate)
 [![Code Coverage](https://scrutinizer-ci.com/g/amyboyd/mongrate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/amyboyd/mongrate/?branch=master)
 
 A command-line tool for applying migrations to a MongoDB database. Migrations are non-linear, and can be tested by writing simple YML files.
@@ -12,7 +12,7 @@ At the moment, Mongrate does not support applying migrations to multiple databas
 
 Example migrations can be found in `resources/examples/`.
 
-Symfony 2 users can use [MongrateBundle](https://github.com/amyboyd/mongrate-bundle) to integrate easily with a Symfony 2 project.
+Symfony 2 users can use [MongrateBundle](https://github.com/mongrate/mongrate-bundle) to integrate easily with a Symfony 2 project.
 
 Table of content:
 
