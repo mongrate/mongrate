@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\CannotApplyException;
+use Mongrate\Migration\Direction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -26,7 +27,7 @@ class UpCommand extends BaseMigrationCommand
         if ($isAlreadyApplied === true) {
             throw new CannotApplyException('Cannot go up - the migration is already applied.');
         } else {
-            $this->migrate('up');
+            $this->migrate(Direction::up());
         }
     }
 }

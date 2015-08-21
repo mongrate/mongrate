@@ -2,6 +2,7 @@
 
 namespace Mongrate\Command;
 
+use Mongrate\Migration\Direction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,9 +23,9 @@ class ToggleMigrationCommand extends BaseMigrationCommand
         $isAlreadyApplied = $this->isMigrationApplied($this->className);
 
         if ($isAlreadyApplied === true) {
-            $this->migrate('down');
+            $this->migrate(Direction::down());
         } else {
-            $this->migrate('up');
+            $this->migrate(Direction::up());
         }
     }
 }

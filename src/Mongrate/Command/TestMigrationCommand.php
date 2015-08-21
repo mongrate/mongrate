@@ -5,6 +5,7 @@ namespace Mongrate\Command;
 use Doctrine\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
 use Mongrate\Exception\MigrationDoesntExist;
+use Mongrate\Migration\Direction;
 use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,7 +38,9 @@ class TestMigrationCommand extends BaseCommand
         $this->output = $output;
 
         $className = new Name($input->getArgument('name'));
-        $upOrDown = $input->getArgument('upOrDown');
+        $direction = $input->getArgument('upOrDown')
+            ? new Direction($input->getArgument('upOrDown'))
+            : null;
 
         $classFile = $this->getMigrationClassFileFromClassName($className);
         if (file_exists($classFile)) {
@@ -50,22 +53,22 @@ class TestMigrationCommand extends BaseCommand
         $conn = new Connection($this->params['mongodb_server'], [], $config);
         $this->db = $conn->selectDatabase('mongrate_test_' . $className);
 
-        if ($upOrDown === 'up' || $upOrDown === 'down') {
-            $this->test($upOrDown, $className);
+        if ($direction) {
+            $this->test($direction, $className);
         } else {
-            $this->test('up', $className);
-            $this->test('down', $className);
+            $this->test(Direction::up(), $className);
+            $this->test(Direction::down(), $className);
         }
     }
 
-    private function test($upOrDown, Name $className)
+    private function test(Direction $direction, Name $className)
     {
         $testsDirectory = $this->params['migrations_directory'] . '/' . $className . '/';
-        $inputFile = $testsDirectory . $upOrDown . '-input.yml';
-        $verifierFile = $testsDirectory . $upOrDown . '-verifier.yml';
+        $inputFile = $testsDirectory . $direction . '-input.yml';
+        $verifierFile = $testsDirectory . $direction . '-verifier.yml';
 
         $this->addFixturesToDatabaseFromYamlFile($inputFile);
-        $this->applyMigration($className, $upOrDown);
+        $this->applyMigration($className, $direction);
         $this->verifyDatabaseAgainstYamlFile($verifierFile);
     }
 
@@ -88,19 +91,17 @@ class TestMigrationCommand extends BaseCommand
         }
     }
 
-    private function applyMigration(Name $className, $upOrDown)
+    private function applyMigration(Name $className, Direction $direction)
     {
         $fullClassName = 'Mongrate\Migrations\\' . $className;
         $migration = new $fullClassName();
 
-        if ($upOrDown === 'up') {
+        if ($direction->isUp()) {
             $this->output->writeln('<info>Testing ' . $className . ' going up.</info>');
             $migration->up($this->db);
-        } elseif ($upOrDown === 'down') {
+        } elseif ($direction->isDown()) {
             $this->output->writeln('<info>Testing ' . $className . ' going down.</info>');
             $migration->down($this->db);
-        } else {
-            throw new \InvalidArgumentException('upOrDown does not support this value: ' . $upOrDown);
         }
     }
 

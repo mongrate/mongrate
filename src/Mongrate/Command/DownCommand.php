@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\CannotApplyException;
+use Mongrate\Migration\Direction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,7 +26,7 @@ class DownCommand extends BaseMigrationCommand
         if ($isAlreadyApplied === false) {
             throw new CannotApplyException('Cannot go down - the migration is not applied yet.');
         } else {
-            $this->migrate('down');
+            $this->migrate(Direction::down());
         }
     }
 }
