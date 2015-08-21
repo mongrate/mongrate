@@ -33,9 +33,11 @@ class DownCommandTest extends BaseCommandTest
 
         // Run the command.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Migrating down... UpdateAddressStructure\n"
-                ."Migrated down\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Migrating down... UpdateAddressStructure\n"
+            ."Migrated down\n",
+            $commandTester->getDisplay()
+        );
 
         // Now has an array of addresses at the root of 'address'.
         $this->assertArrayHasKey(0, $collection->findOne(['name' => 'Bob'])['address']);
@@ -68,5 +70,19 @@ class DownCommandTest extends BaseCommandTest
 
         $this->setExpectedException('Mongrate\Exception\CannotApplyException', 'Cannot go down - the migration is not applied yet.');
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+    }
+
+    public function testExecute_forceApply()
+    {
+        $application = new Application();
+        $application->add(new DownCommand(null, $this->parametersFromYmlFile));
+        $command = $application->find('down');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
+        $this->assertContains("Migrated down", $commandTester->getDisplay());
+
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', '-f' => true]);
+        $this->assertContains("Migrated down", $commandTester->getDisplay());
     }
 }
