@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\MigrationDoesntExist;
+use Mongrate\Migration\Direction;
 use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,16 +39,16 @@ class BaseMigrationCommand extends BaseCommand
     /**
      * Migrate up or down.
      *
-     * @param string $upOrDown
+     * @param string $direction
      */
-    protected function migrate($upOrDown)
+    protected function migrate(Direction $direction)
     {
         $fullClassName = $this->fullClassName;
         $migration = new $fullClassName();
 
-        $this->output->writeln('<info>Migrating ' . $upOrDown . '...</info> <comment>' . $this->className . '</comment>');
+        $this->output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $this->className . '</comment>');
 
-        if ($upOrDown === 'up') {
+        if ($direction->isUp()) {
             $migration->up($this->db);
             $this->setMigrationApplied(true);
         } else {
@@ -55,7 +56,7 @@ class BaseMigrationCommand extends BaseCommand
             $this->setMigrationApplied(false);
         }
 
-        $this->output->writeln('<info>Migrated ' . $upOrDown . '</info>');
+        $this->output->writeln('<info>Migrated ' . $direction . '</info>');
     }
 
     /**
