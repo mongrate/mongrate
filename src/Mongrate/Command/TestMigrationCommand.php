@@ -13,6 +13,8 @@ use Symfony\Component\Yaml\Parser;
 
 class TestMigrationCommand extends BaseCommand
 {
+    private $input;
+
     private $output;
 
     private static $matchNativeMongoClass = '/^Mongo(Id|Code|Date|Regex|BinData|Int32|Int64|DBRef|MinKey|MaxKey|Timestamp)\((.*)\)$/';
@@ -22,13 +24,16 @@ class TestMigrationCommand extends BaseCommand
         $this->setName('test')
             ->setDescription('Test a migration up and down.')
             ->addArgument('name', InputArgument::REQUIRED, 'The class name, formatted like "UpdateAddressStructure_20140523".')
-            ->addArgument('upOrDown', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.');
+            ->addArgument('upOrDown', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.')
+            ->addOption('pretty', null, InputArgument::OPTIONAL, 'Whether to pretty-print the output if there is an error.', false)
+        ;
 
         parent::configure();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->input = $input;
         $this->output = $output;
 
         $className = new Name($input->getArgument('name'));
@@ -109,14 +114,12 @@ class TestMigrationCommand extends BaseCommand
 
             $verifierObjects = array_map([$this, 'convertYmlStringToNativeMongoObjects'], $verifierObjects);
             $verifierObjects = $this->normalizeObject($verifierObjects);
-            $verifierObjectsJson = json_encode($verifierObjects);
 
             $actualObjects = array_values($collection->find(
                 ['$query' => [], '$orderby' => ['_orderInTestYamlFile' => 1]],
                 ['_id' => 0, '_orderInTestYamlFile' => 0]
             )->toArray());
             $actualObjects = $this->normalizeObject($actualObjects);
-            $actualObjectsJson = json_encode($actualObjects);
 
             $isVerified = $this->areEqual($verifierObjects, $actualObjects);
             if ($isVerified) {
@@ -124,11 +127,18 @@ class TestMigrationCommand extends BaseCommand
             } else {
                 $this->output->writeln('<error>Test failed.</error>');
                 $this->output->writeln('<comment>Expected:</comment>');
-                $this->output->writeln($verifierObjectsJson);
+                $this->output->writeln($this->getDocumentsAsPrintableJson($verifierObjects));
                 $this->output->writeln('<comment>Actual:</comment>');
-                $this->output->writeln($actualObjectsJson);
+                $this->output->writeln($this->getDocumentsAsPrintableJson($actualObjects));
             }
         }
+    }
+
+    private function getDocumentsAsPrintableJson(array $documents)
+    {
+        $options = $this->input->getOption('pretty') ? JSON_PRETTY_PRINT : null;
+
+        return json_encode($documents, $options);
     }
 
     private function normalizeObject($object)

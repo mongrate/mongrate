@@ -112,7 +112,7 @@ To migrate down:
 To verify a migration with it's YML test files:
 
 ```sh
-./mongrate test 20140523_UpdateAddressStructure (up|down|empty)
+./mongrate test 20140523_UpdateAddressStructure (up|down|empty) [--pretty]
 ```
 NOTE: If you leave migration type `empty` after the migration name it will test both migrations `up` and `down`.
 
