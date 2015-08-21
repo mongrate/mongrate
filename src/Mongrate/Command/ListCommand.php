@@ -2,6 +2,7 @@
 
 namespace Mongrate\Command;
 
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,15 +29,20 @@ class ListCommand extends BaseCommand
                 continue;
             }
 
-            $migrations[] = ['file' => $file, 'isApplied' => $this->isMigrationApplied($file)];
+            $name = new Name($file);
+
+            $migrations[] = [
+                'name' => $name,
+                'isApplied' => $this->isMigrationApplied($name),
+            ];
         }
 
-        usort($migrations, function($a, $b) {
-            return strcmp($a['file'], $b['file']);
+        usort($migrations, function ($a, $b) {
+            return strcmp($a['name'], $b['name']);
         });
 
         foreach ($migrations as $migration) {
-            $output->writeln('<comment>' . $migration['file'] . '</comment> '
+            $output->writeln('<comment>' . $migration['name'] . '</comment> '
                 . ($migration['isApplied'] ? '<info>applied</info>' : '<error>not applied</error>'));
         }
     }

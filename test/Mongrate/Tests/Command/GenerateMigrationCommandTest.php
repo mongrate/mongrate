@@ -8,6 +8,10 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateMigrationCommandTest extends BaseCommandTest
 {
+    private $command;
+
+    private $commandTester;
+
     public function setUp()
     {
         parent::setUp();
@@ -16,6 +20,13 @@ class GenerateMigrationCommandTest extends BaseCommandTest
         $this->duplicateFile = 'resources/examples/DuplicateTest_' . date('Ymd') . '/Migration.php';
 
         $this->deleteTestFiles();
+
+        $application = new Application();
+        $application->add(new GenerateMigrationCommand(null, $this->parametersFromYmlFile));
+
+        $this->command = $application->find('generate-migration');
+
+        $this->commandTester = new CommandTester($this->command);
     }
 
     public function tearDown()
@@ -37,14 +48,11 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
     public function testExecute()
     {
-        $application = new Application();
-        $application->add(new GenerateMigrationCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('generate-migration');
-        $commandTester = new CommandTester($command);
-
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'CreatedByTests']);
-        $this->assertEquals('Generated migration file and YML templates in resources/examples/CreatedByTests_' . date('Ymd') . "\n",
-            $commandTester->getDisplay());
+        $this->commandTester->execute(['command' => $this->command->getName(), 'name' => 'CreatedByTests']);
+        $this->assertEquals(
+            'Generated migration file and YML templates in resources/examples/CreatedByTests_' . date('Ymd') . "\n",
+            $this->commandTester->getDisplay()
+        );
 
         $this->assertFileExists($this->expectedFile);
 
@@ -57,16 +65,23 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
     public function testExecute_duplicateMigrationName()
     {
-        $application = new Application();
-        $application->add(new GenerateMigrationCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('generate-migration');
-        $commandTester = new CommandTester($command);
-
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'DuplicateTest']);
+        $this->commandTester->execute(['command' => $this->command->getName(), 'name' => 'DuplicateTest']);
 
         $this->setExpectedException('Mongrate\Exception\DuplicateMigrationName', 'A migration with the name "DuplicateTest_');
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'DuplicateTest']);
+        $this->commandTester->execute(['command' => $this->command->getName(), 'name' => 'DuplicateTest']);
 
         $this->assertFileNotExists($this->duplicateFile);
+    }
+
+    /**
+     * @expectedException Mongrate\Exception\InvalidNameException
+     * @expectedExceptionMessage Migration name cannot exceed 49 characters, is 58: ANameThatIsAboveTheLimitOf49CharactersXXXXXXXXXXX_201
+     */
+    public function testExecute_nameTooLong()
+    {
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
+            'name' => 'ANameThatIsAboveTheLimitOf49CharactersXXXXXXXXXXX',
+        ]);
     }
 }

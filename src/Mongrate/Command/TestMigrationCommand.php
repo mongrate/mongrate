@@ -5,6 +5,7 @@ namespace Mongrate\Command;
 use Doctrine\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
 use Mongrate\Exception\MigrationDoesntExist;
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +31,7 @@ class TestMigrationCommand extends BaseCommand
     {
         $this->output = $output;
 
-        $className = $input->getArgument('name');
+        $className = new Name($input->getArgument('name'));
         $upOrDown = $input->getArgument('upOrDown');
 
         $classFile = $this->getMigrationClassFileFromClassName($className);
@@ -52,7 +53,7 @@ class TestMigrationCommand extends BaseCommand
         }
     }
 
-    private function test($upOrDown, $className)
+    private function test($upOrDown, Name $className)
     {
         $testsDirectory = $this->params['migrations_directory'] . '/' . $className . '/';
         $inputFile = $testsDirectory . $upOrDown . '-input.yml';
@@ -82,7 +83,7 @@ class TestMigrationCommand extends BaseCommand
         }
     }
 
-    private function applyMigration($className, $upOrDown)
+    private function applyMigration(Name $className, $upOrDown)
     {
         $fullClassName = 'Mongrate\Migrations\\' . $className;
         $migration = new $fullClassName();
