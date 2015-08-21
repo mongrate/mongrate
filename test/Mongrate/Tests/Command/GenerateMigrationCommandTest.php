@@ -84,4 +84,16 @@ class GenerateMigrationCommandTest extends BaseCommandTest
             'name' => 'ANameThatIsAboveTheLimitOf49CharactersXXXXXXXXXXX',
         ]);
     }
+
+    /**
+     * @expectedException Mongrate\Exception\InvalidNameException
+     * @expectedExceptionMessage Migration name contains invalid characters: ^*
+     */
+    public function testExecute_nameHasInvalidCharacters()
+    {
+        $this->commandTester->execute([
+            'command' => $this->command->getName(),
+            'name' => 'Hel^o*',
+        ]);
+    }
 }

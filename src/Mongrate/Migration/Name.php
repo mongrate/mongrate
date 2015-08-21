@@ -15,6 +15,12 @@ class Name
      */
     const MAX_NAME_LENGTH = 49;
 
+    /**
+     * The name must be characters that are valid for a class name (excluding \ because namespaces
+     * are not supported).
+     */
+    const NAME_VALID_CHARS_REGEX = 'a-zA-Z0-9_';
+
     private $name;
 
     /**
@@ -40,6 +46,16 @@ class Name
      */
     private function validate($name)
     {
+        if (strlen($name) === 0) {
+            throw new InvalidNameException('Migration name must not be empty');
+        }
+
+        $validCharsRegex = '/^[' . self::NAME_VALID_CHARS_REGEX . ']+$/';
+        if (preg_match($validCharsRegex, $name) === 0) {
+            $invalidChars = preg_replace('/[' . self::NAME_VALID_CHARS_REGEX . ']/', '', $name);
+            throw new InvalidNameException('Migration name contains invalid characters: ' . $invalidChars);
+        }
+
         if (strlen($name) > self::MAX_NAME_LENGTH) {
             throw new InvalidNameException(sprintf(
                 'Migration name cannot exceed %d characters, is %d: %s',
