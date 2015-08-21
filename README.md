@@ -120,20 +120,4 @@ NOTE: If you leave migration type `empty` after the migration name it will test 
 Contributing
 ============
 
-Please submit pull requests [on GitHub](https://github.com/amyboyd/mongrate/pulls).
-
-Project follow PSR2 standard. 
-
-When you do `composer install` it should set a `git-precomit` to help you follow the standards.
-
-Install the Git pre-commit hook manually:
-
-```sh
-bash contrib/setup.sh
-```
-
-## How to run tests
-
-To run the test suite, just run `phpunit`. 
-
-The tests use a database called `mongrate_test` in your local MongoDB server.
+See the file [CONTRIBUTING.md](CONTRIBUTING.md)
