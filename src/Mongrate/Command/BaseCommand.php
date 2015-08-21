@@ -47,9 +47,9 @@ class BaseCommand extends Command
         $this->db = $conn->selectDatabase($this->params['mongodb_db']);
     }
 
-    protected function getMigrationClassFileFromClassName($className)
+    protected function getMigrationClassFileFromName($name)
     {
-        return $this->params['migrations_directory'] . '/' . $className . '/Migration.php';
+        return $this->params['migrations_directory'] . '/' . $name . '/Migration.php';
     }
 
     /**
@@ -57,10 +57,10 @@ class BaseCommand extends Command
      *
      * @param boolean $isApplied True if applied, false if not.
      */
-    protected function isMigrationApplied(Name $className)
+    protected function isMigrationApplied(Name $name)
     {
         $collection = $this->getAppliedCollection();
-        $criteria = ['className' => (string) $className];
+        $criteria = ['className' => (string) $name];
         $record = $collection->find($criteria)->getSingleResult();
 
         if ($record === null) {

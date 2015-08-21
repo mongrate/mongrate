@@ -19,11 +19,11 @@ class GenerateMigrationCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $className = new Name($input->getArgument('name') . '_' . date('Ymd'));
-        $targetDirectory = dirname($this->getMigrationClassFileFromClassName($className));
+        $name = new Name($input->getArgument('name') . '_' . date('Ymd'));
+        $targetDirectory = dirname($this->getMigrationClassFileFromName($name));
 
         if (is_dir($targetDirectory)) {
-            throw new DuplicateMigrationName($className);
+            throw new DuplicateMigrationName($name);
         } else {
             mkdir($targetDirectory, 0766, true);
         }
@@ -37,7 +37,7 @@ class GenerateMigrationCommand extends BaseCommand
 
             $template = file_get_contents($file->getPathName());
             $templated = strtr($template, [
-                '%class%' => $className
+                '%class%' => $name
             ]);
             file_put_contents($targetDirectory . '/' . $file->getFileName(), $templated);
         }

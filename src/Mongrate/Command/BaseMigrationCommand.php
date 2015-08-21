@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BaseMigrationCommand extends BaseCommand
 {
-    protected $className;
+    protected $migrationName;
 
     protected $fullClassName;
 
@@ -25,14 +25,14 @@ class BaseMigrationCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->className = new Name($input->getArgument('name'));
-        $this->fullClassName = 'Mongrate\Migrations\\' . $this->className;
+        $this->migrationName = new Name($input->getArgument('name'));
+        $this->fullClassName = 'Mongrate\Migrations\\' . $this->migrationName;
 
-        $file = $this->getMigrationClassFileFromClassName($this->className);
+        $file = $this->getMigrationClassFileFromName($this->migrationName);
         if (file_exists($file)) {
             require_once $file;
         } else {
-            throw new MigrationDoesntExist($this->className, $file);
+            throw new MigrationDoesntExist($this->migrationName, $file);
         }
     }
 
@@ -46,7 +46,7 @@ class BaseMigrationCommand extends BaseCommand
         $fullClassName = $this->fullClassName;
         $migration = new $fullClassName();
 
-        $this->output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $this->className . '</comment>');
+        $this->output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $this->migrationName . '</comment>');
 
         if ($direction->isUp()) {
             $migration->up($this->db);
@@ -68,8 +68,8 @@ class BaseMigrationCommand extends BaseCommand
     private function setMigrationApplied($isApplied)
     {
         $collection = $this->getAppliedCollection();
-        $criteria = ['className' => (string) $this->className];
-        $newObj = ['$set' => ['className' => (string) $this->className, 'isApplied' => $isApplied]];
+        $criteria = ['className' => (string) $this->migrationName];
+        $newObj = ['$set' => ['className' => (string) $this->migrationName, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
     }
 }
