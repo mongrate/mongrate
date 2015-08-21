@@ -1,6 +1,12 @@
 Changelog
 =========
 
+**1.3.10**
+
+* Added `--force` option to the `up` and `down` commands.
+* Added `--pretty` option to the `test` command.
+* Added validation for migration names, to prevent names over 49 characters being entered (they cause problems).
+
 **1.3**
 
 * The `list-migrations` command now shows whether each migration has been applied.

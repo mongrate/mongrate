@@ -10,6 +10,12 @@ use Symfony\Component\Yaml\Parser;
 
 class BaseCommand extends Command
 {
+    /**
+     * Configuration, either read from the `parameters.yml` file or given by a wrapper like
+     * MongrateBundle.
+     *
+     * @var array
+     */
     protected $params;
 
     /**
@@ -29,15 +35,25 @@ class BaseCommand extends Command
         if (is_array($params)) {
             $this->params = $params;
         } else {
-            $yaml = new Parser();
-            $this->params = $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
+            $this->params = $this->getDefaultConfigurationParams();
         }
 
-        // Trim trailing slashes so this can be configured with or without trailing slashes without
-        // it affecting anything.
-        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
+        $this->cleanConfigurationParams();
 
         $this->setupDatabaseConnection();
+    }
+
+    private function getDefaultConfigurationParams()
+    {
+        $yaml = new Parser();
+        return $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
+    }
+
+    private function cleanConfigurationParams()
+    {
+        // Trim trailing slashes so this can be configured with or without trailing slashes without
+        // it making a difference.
+        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
     }
 
     protected function setupDatabaseConnection()
@@ -47,9 +63,9 @@ class BaseCommand extends Command
         $this->db = $conn->selectDatabase($this->params['mongodb_db']);
     }
 
-    protected function getMigrationClassFileFromClassName($className)
+    protected function getMigrationClassFileFromName($name)
     {
-        return $this->params['migrations_directory'] . '/' . $className . '/Migration.php';
+        return $this->params['migrations_directory'] . '/' . $name . '/Migration.php';
     }
 
     /**
@@ -57,10 +73,10 @@ class BaseCommand extends Command
      *
      * @param boolean $isApplied True if applied, false if not.
      */
-    protected function isMigrationApplied(Name $className)
+    protected function isMigrationApplied(Name $name)
     {
         $collection = $this->getAppliedCollection();
-        $criteria = ['className' => (string) $className];
+        $criteria = ['className' => (string) $name];
         $record = $collection->find($criteria)->getSingleResult();
 
         if ($record === null) {

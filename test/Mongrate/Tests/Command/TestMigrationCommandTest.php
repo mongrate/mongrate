@@ -17,11 +17,13 @@ class TestMigrationCommandTest extends BaseCommandTest
 
         // First run should go up.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Testing UpdateAddressStructure going up.\n"
-                . "Test passed.\n"
-                . "Testing UpdateAddressStructure going down.\n"
-                . "Test passed.\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Testing UpdateAddressStructure going up.\n"
+            . "Test passed.\n"
+            . "Testing UpdateAddressStructure going down.\n"
+            . "Test passed.\n",
+            $commandTester->getDisplay()
+        );
     }
 
     public function testExecute_up()
@@ -32,10 +34,12 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'upOrDown' => 'up']);
-        $this->assertEquals("Testing UpdateAddressStructure going up.\n"
-                . "Test passed.\n",
-            $commandTester->getDisplay());
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'up']);
+        $this->assertEquals(
+            "Testing UpdateAddressStructure going up.\n"
+            . "Test passed.\n",
+            $commandTester->getDisplay()
+        );
     }
 
     public function testExecute_down()
@@ -46,15 +50,17 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'upOrDown' => 'down']);
-        $this->assertEquals("Testing UpdateAddressStructure going down.\n"
-                . "Test passed.\n",
-            $commandTester->getDisplay());
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'down']);
+        $this->assertEquals(
+            "Testing UpdateAddressStructure going down.\n"
+            . "Test passed.\n",
+            $commandTester->getDisplay()
+        );
     }
 
     /**
      * @expectedException Mongrate\Exception\MigrationDoesntExist
-     * @expectedExceptionMessage There is no migration class called "Elvis" in "resources/examples/Elvis/Migration.php"
+     * @expectedExceptionMessage There is no migration called "Elvis" in "resources/examples/Elvis/Migration.php"
      */
     public function testExecute_migrationDoesntExist()
     {
@@ -74,9 +80,11 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'upOrDown' => 'up']);
-        $this->assertEquals("Testing DeleteOldLogs going up.\n"
-                . "Test passed.\n",
-            $commandTester->getDisplay());
+        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'direction' => 'up']);
+        $this->assertEquals(
+            "Testing DeleteOldLogs going up.\n"
+            . "Test passed.\n",
+            $commandTester->getDisplay()
+        );
     }
 }

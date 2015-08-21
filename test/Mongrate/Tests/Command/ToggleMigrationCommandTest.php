@@ -21,29 +21,35 @@ class ToggleMigrationCommandTest extends BaseCommandTest
 
         // First run should go up.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Migrating up... UpdateAddressStructure\n"
-                ."Migrated up\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Migrating up... UpdateAddressStructure\n"
+            ."Migrated up\n",
+            $commandTester->getDisplay()
+        );
         $this->assertTrue($migrationsCollection->findOne(['className' => 'UpdateAddressStructure'])['isApplied']);
 
         // Then down.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Migrating down... UpdateAddressStructure\n"
-                ."Migrated down\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Migrating down... UpdateAddressStructure\n"
+            ."Migrated down\n",
+            $commandTester->getDisplay()
+        );
         $this->assertFalse($migrationsCollection->findOne(['className' => 'UpdateAddressStructure'])['isApplied']);
 
         // Then up again.
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
-        $this->assertEquals("Migrating up... UpdateAddressStructure\n"
-                ."Migrated up\n",
-            $commandTester->getDisplay());
+        $this->assertEquals(
+            "Migrating up... UpdateAddressStructure\n"
+            ."Migrated up\n",
+            $commandTester->getDisplay()
+        );
         $this->assertTrue($migrationsCollection->findOne(['className' => 'UpdateAddressStructure'])['isApplied']);
     }
 
     /**
      * @expectedException Mongrate\Exception\MigrationDoesntExist
-     * @expectedExceptionMessage There is no migration class called "Elvis" in "resources/examples/Elvis/Migration.php"
+     * @expectedExceptionMessage There is no migration called "Elvis" in "resources/examples/Elvis/Migration.php"
      */
     public function testExecute_migrationDoesntExist()
     {

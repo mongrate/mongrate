@@ -47,7 +47,7 @@ class UpCommandTest extends BaseCommandTest
 
     /**
      * @expectedException Mongrate\Exception\MigrationDoesntExist
-     * @expectedExceptionMessage There is no migration class called "Elvis" in "resources/examples/Elvis/Migration.php"
+     * @expectedExceptionMessage There is no migration called "Elvis" in "resources/examples/Elvis/Migration.php"
      */
     public function testExecute_migrationDoesntExist()
     {

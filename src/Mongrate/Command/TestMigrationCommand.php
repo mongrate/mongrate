@@ -25,7 +25,7 @@ class TestMigrationCommand extends BaseCommand
         $this->setName('test')
             ->setDescription('Test a migration up and down.')
             ->addArgument('name', InputArgument::REQUIRED, 'The class name, formatted like "UpdateAddressStructure_20140523".')
-            ->addArgument('upOrDown', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.')
+            ->addArgument('direction', InputArgument::OPTIONAL, 'Whether to test going up or down. If left blank, both are tested.')
             ->addOption('pretty', null, InputArgument::OPTIONAL, 'Whether to pretty-print the output if there is an error.', false)
         ;
 
@@ -37,38 +37,38 @@ class TestMigrationCommand extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $className = new Name($input->getArgument('name'));
-        $direction = $input->getArgument('upOrDown')
-            ? new Direction($input->getArgument('upOrDown'))
+        $name = new Name($input->getArgument('name'));
+        $direction = $input->getArgument('direction')
+            ? new Direction($input->getArgument('direction'))
             : null;
 
-        $classFile = $this->getMigrationClassFileFromClassName($className);
+        $classFile = $this->getMigrationClassFileFromName($name);
         if (file_exists($classFile)) {
             require_once $classFile;
         } else {
-            throw new MigrationDoesntExist($className, $classFile);
+            throw new MigrationDoesntExist($name, $classFile);
         }
 
         $config = new Configuration();
         $conn = new Connection($this->params['mongodb_server'], [], $config);
-        $this->db = $conn->selectDatabase('mongrate_test_' . $className);
+        $this->db = $conn->selectDatabase('mongrate_test_' . $name);
 
         if ($direction) {
-            $this->test($direction, $className);
+            $this->test($name, $direction);
         } else {
-            $this->test(Direction::up(), $className);
-            $this->test(Direction::down(), $className);
+            $this->test($name, Direction::up());
+            $this->test($name, Direction::down());
         }
     }
 
-    private function test(Direction $direction, Name $className)
+    private function test(Name $name, Direction $direction)
     {
-        $testsDirectory = $this->params['migrations_directory'] . '/' . $className . '/';
+        $testsDirectory = $this->params['migrations_directory'] . '/' . $name . '/';
         $inputFile = $testsDirectory . $direction . '-input.yml';
         $verifierFile = $testsDirectory . $direction . '-verifier.yml';
 
         $this->addFixturesToDatabaseFromYamlFile($inputFile);
-        $this->applyMigration($className, $direction);
+        $this->applyMigration($name, $direction);
         $this->verifyDatabaseAgainstYamlFile($verifierFile);
     }
 
@@ -91,16 +91,16 @@ class TestMigrationCommand extends BaseCommand
         }
     }
 
-    private function applyMigration(Name $className, Direction $direction)
+    private function applyMigration(Name $name, Direction $direction)
     {
-        $fullClassName = 'Mongrate\Migrations\\' . $className;
+        $fullClassName = 'Mongrate\Migrations\\' . $name;
         $migration = new $fullClassName();
 
         if ($direction->isUp()) {
-            $this->output->writeln('<info>Testing ' . $className . ' going up.</info>');
+            $this->output->writeln('<info>Testing ' . $name . ' going up.</info>');
             $migration->up($this->db);
         } elseif ($direction->isDown()) {
-            $this->output->writeln('<info>Testing ' . $className . ' going down.</info>');
+            $this->output->writeln('<info>Testing ' . $name . ' going down.</info>');
             $migration->down($this->db);
         }
     }
