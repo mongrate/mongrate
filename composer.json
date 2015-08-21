@@ -3,9 +3,10 @@
     "type": "library",
     "description": "A command-line tool for applying migrations to a MongoDB database",
     "keywords": ["migrations", "mongodb", "database"],
-    "homepage": "https://github.com/amyboyd/mongrate",
+    "homepage": "https://github.com/mongrate/mongrate",
     "authors": [
-        { "name": "Amy Boyd", "email": "amy@amyboyd.co.uk" }
+        { "name": "Amy Boyd", "email": "amy@amyboyd.co.uk" },
+        { "name": "Bernardo Silva", "email": "benny.stuff@gmail.com" }
     ],
     "autoload": {
         "psr-0": {

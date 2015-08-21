@@ -1,7 +1,7 @@
 Mongrate
 ========
 
-[![Build Status](https://travis-ci.org/amyboyd/mongrate.svg?branch=master)](https://travis-ci.org/amyboyd/mongrate)
+[![Build Status](https://travis-ci.org/mongrate/mongrate.svg?branch=master)](https://travis-ci.org/mongrate/mongrate)
 [![Code Coverage](https://scrutinizer-ci.com/g/amyboyd/mongrate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/amyboyd/mongrate/?branch=master)
 
 A command-line tool for applying migrations to a MongoDB database. Migrations are non-linear, and can be tested by writing simple YML files.
@@ -12,7 +12,7 @@ At the moment, Mongrate does not support applying migrations to multiple databas
 
 Example migrations can be found in `resources/examples/`.
 
-Symfony 2 users can use [MongrateBundle](https://github.com/amyboyd/mongrate-bundle) to integrate easily with a Symfony 2 project.
+Symfony 2 users can use [MongrateBundle](https://github.com/mongrate/mongrate-bundle) to integrate easily with a Symfony 2 project.
 
 Table of content:
 
@@ -120,20 +120,4 @@ NOTE: If you leave migration type `empty` after the migration name it will test 
 Contributing
 ============
 
-Please submit pull requests [on GitHub](https://github.com/amyboyd/mongrate/pulls).
-
-Project follow PSR2 standard. 
-
-When you do `composer install` it should set a `git-precomit` to help you follow the standards.
-
-Install the Git pre-commit hook manually:
-
-```sh
-bash contrib/setup.sh
-```
-
-## How to run tests
-
-To run the test suite, just run `phpunit`. 
-
-The tests use a database called `mongrate_test` in your local MongoDB server.
+See the file [CONTRIBUTING.md](CONTRIBUTING.md)
