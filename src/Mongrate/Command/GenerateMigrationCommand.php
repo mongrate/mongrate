@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\DuplicateMigrationName;
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,7 +19,7 @@ class GenerateMigrationCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $className = $input->getArgument('name') . '_' . date('Ymd');
+        $className = new Name($input->getArgument('name') . '_' . date('Ymd'));
         $targetDirectory = dirname($this->getMigrationClassFileFromClassName($className));
 
         if (is_dir($targetDirectory)) {

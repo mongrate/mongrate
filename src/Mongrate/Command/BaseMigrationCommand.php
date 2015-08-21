@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\MigrationDoesntExist;
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +24,7 @@ class BaseMigrationCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $this->className = $input->getArgument('name');
+        $this->className = new Name($input->getArgument('name'));
         $this->fullClassName = 'Mongrate\Migrations\\' . $this->className;
 
         $file = $this->getMigrationClassFileFromClassName($this->className);
@@ -66,8 +67,8 @@ class BaseMigrationCommand extends BaseCommand
     private function setMigrationApplied($isApplied)
     {
         $collection = $this->getAppliedCollection();
-        $criteria = ['className' => $this->className];
-        $newObj = ['$set' => ['className' => $this->className, 'isApplied' => $isApplied]];
+        $criteria = ['className' => (string) $this->className];
+        $newObj = ['$set' => ['className' => (string) $this->className, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
     }
 }

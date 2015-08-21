@@ -4,6 +4,7 @@ namespace Mongrate\Command;
 
 use Doctrine\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Parser;
 
@@ -56,10 +57,10 @@ class BaseCommand extends Command
      *
      * @param boolean $isApplied True if applied, false if not.
      */
-    protected function isMigrationApplied($className)
+    protected function isMigrationApplied(Name $className)
     {
         $collection = $this->getAppliedCollection();
-        $criteria = ['className' => $className];
+        $criteria = ['className' => (string) $className];
         $record = $collection->find($criteria)->getSingleResult();
 
         if ($record === null) {
