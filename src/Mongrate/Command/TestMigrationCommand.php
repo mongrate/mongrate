@@ -54,14 +54,14 @@ class TestMigrationCommand extends BaseCommand
         $this->db = $conn->selectDatabase('mongrate_test_' . $name);
 
         if ($direction) {
-            $this->test($direction, $name);
+            $this->test($name, $direction);
         } else {
-            $this->test(Direction::up(), $name);
-            $this->test(Direction::down(), $name);
+            $this->test($name, Direction::up());
+            $this->test($name, Direction::down());
         }
     }
 
-    private function test(Direction $direction, Name $name)
+    private function test(Name $name, Direction $direction)
     {
         $testsDirectory = $this->params['migrations_directory'] . '/' . $name . '/';
         $inputFile = $testsDirectory . $direction . '-input.yml';

@@ -10,6 +10,12 @@ use Symfony\Component\Yaml\Parser;
 
 class BaseCommand extends Command
 {
+    /**
+     * Configuration, either read from the `parameters.yml` file or given by a wrapper like
+     * MongrateBundle.
+     *
+     * @var array
+     */
     protected $params;
 
     /**
@@ -29,15 +35,25 @@ class BaseCommand extends Command
         if (is_array($params)) {
             $this->params = $params;
         } else {
-            $yaml = new Parser();
-            $this->params = $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
+            $this->params = $this->getDefaultConfigurationParams();
         }
 
-        // Trim trailing slashes so this can be configured with or without trailing slashes without
-        // it affecting anything.
-        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
+        $this->cleanConfigurationParams();
 
         $this->setupDatabaseConnection();
+    }
+
+    private function getDefaultConfigurationParams()
+    {
+        $yaml = new Parser();
+        return $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
+    }
+
+    private function cleanConfigurationParams()
+    {
+        // Trim trailing slashes so this can be configured with or without trailing slashes without
+        // it making a difference.
+        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
     }
 
     protected function setupDatabaseConnection()

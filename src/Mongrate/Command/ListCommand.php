@@ -37,13 +37,17 @@ class ListCommand extends BaseCommand
             ];
         }
 
+        // Sort the migrations alphabetically so the list is easier to scan.
         usort($migrations, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
 
         foreach ($migrations as $migration) {
-            $output->writeln('<comment>' . $migration['name'] . '</comment> '
-                . ($migration['isApplied'] ? '<info>applied</info>' : '<error>not applied</error>'));
+            if ($migration['isApplied']) {
+                $output->writeln(sprintf('<comment>%s</comment> <info>applied</info>', $migration['name']));
+            } else {
+                $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', $migration['name']));
+            }
         }
     }
 }
