@@ -20,10 +20,13 @@ $app->add(new \Mongrate\Command\GenerateMigrationCommand);
 $app->add(new \Mongrate\Command\ListCommand);
 $app->add(new \Mongrate\Command\TestMigrationCommand);
 $app->setName('Mongrate migration tool');
-$app->setVersion(sprintf(
-    '%s (%s)',
-    substr(`git rev-parse HEAD`, 0, 7),
-    date('Y-m-d H:i:s')
-));
+
+if (defined('MONGRATE_VERSION')) {
+    // Running in the Phar.
+    $app->setVersion(MONGRATE_VERSION);
+} else {
+    // Running in dev mode.
+    $app->setVersion(require_once __DIR__ . '/get-version.php');
+}
 
 // `$app->run()` cannot be called in this file, because this file is included by the tests.

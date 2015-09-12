@@ -27,6 +27,7 @@ $finder->files()
     ->ignoreVCS(true)
     ->name('*.php')
     ->exclude('Tests')
+    ->notName('get-version.php')
     ->in('src')
     ->in('vendor/composer')
     ->in('vendor/doctrine')
@@ -46,7 +47,14 @@ foreach ($finder as $file) {
     $phar->addFile($file->getPathName());
 }
 
-$phar->addFromString('index.php', '<?php require_once "src/create-application.php"; $app->run();');
+$version = require_once 'src/get-version.php';
+
+$phar->addFromString('index.php', '
+    <?php
+    define("MONGRATE_VERSION", "' . $version . '");
+    require_once "src/create-application.php";
+    $app->run();
+');
 
 $phar->setStub("#!/usr/bin/env php \n" . $phar->getStub());
 
