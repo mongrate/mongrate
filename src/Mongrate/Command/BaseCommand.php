@@ -45,8 +45,24 @@ class BaseCommand extends Command
 
     private function getDefaultConfigurationParams()
     {
+        $file = $this->getDefaultConfigurationParamsFile();
+        $fileContent = file_get_contents($file);
+
         $yaml = new Parser();
-        return $yaml->parse(file_get_contents('config/parameters.yml'))['parameters'];
+        return $yaml->parse($fileContent)['parameters'];
+    }
+
+    private function getDefaultConfigurationParamsFile()
+    {
+        if (file_exists('config/parameters.yml')) {
+            return 'config/parameters.yml';
+        }
+
+        if (file_exists('/etc/mongrate.yml')) {
+            return '/etc/mongrate.yml';
+        }
+
+        throw new \RuntimeException('Config file not found in `config/parameters.yml` or `/etc/mongrate.yml`');
     }
 
     private function cleanConfigurationParams()

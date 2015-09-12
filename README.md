@@ -45,6 +45,8 @@ cp config/parameters.yml.dist config/parameters.yml
 
 Edit `config/parameters.yml` and enter your MongoDB connection information.
 
+Or, alternatively, you can put your configuration in `/etc/mongrate.yml`.
+
 ## Configuration
 
 Your `parameters.yml` you should have something similar to this.
