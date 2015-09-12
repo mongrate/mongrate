@@ -29,3 +29,9 @@ bash contrib/setup.sh
 To run the test suite, just run `phpunit` or `bin/phpunit`.
 
 The tests use a database called `mongrate_test` in your local MongoDB server.
+
+## How to create `mongrate.phar`
+
+Run `bin/create-phar.php` and a new Phar file will be created.
+
+The Phar cannot be compressed; otherwise the file cannot be run directly in bash.
