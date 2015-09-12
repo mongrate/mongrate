@@ -4,8 +4,6 @@
  * Create a console application with the Mongrate commands.
  */
 
-chdir(__DIR__ . '/../');
-
 require_once 'vendor/autoload.php';
 
 $loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
