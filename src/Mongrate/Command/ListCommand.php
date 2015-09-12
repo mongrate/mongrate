@@ -20,6 +20,8 @@ class ListCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->ensureMigrationsDirectoryExists();
+
         $iterator = new \DirectoryIterator($this->params['migrations_directory']);
         $migrations = [];
 
@@ -48,6 +50,13 @@ class ListCommand extends BaseCommand
             } else {
                 $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', $migration['name']));
             }
+        }
+    }
+
+    private function ensureMigrationsDirectoryExists()
+    {
+        if (!is_dir($this->params['migrations_directory'])) {
+            throw new \RuntimeException('The migrations directory does not exist. It is configured to be in: ' . $this->params['migrations_directory']);
         }
     }
 }
