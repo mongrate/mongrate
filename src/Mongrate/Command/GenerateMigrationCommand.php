@@ -13,7 +13,7 @@ class GenerateMigrationCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('generate-migration')
-            ->setDescription('Create a migration class')
+            ->setDescription('Create a migration class.')
             ->addArgument('name', InputArgument::REQUIRED, 'The name, formatted like "UpdateAddressStructure".');
     }
 
