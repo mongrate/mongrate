@@ -80,10 +80,10 @@ class BaseMigrationCommand extends BaseCommand
         $this->output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $this->migrationName . '</comment>');
 
         if ($direction->isUp()) {
-            $migration->up($this->db);
+            $migration->up($this->service->getDatabase());
             $this->setMigrationApplied(true);
         } else {
-            $migration->down($this->db);
+            $migration->down($this->service->getDatabase());
             $this->setMigrationApplied(false);
         }
 

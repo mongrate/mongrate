@@ -2,8 +2,6 @@
 
 namespace Mongrate\Command;
 
-use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
-use Doctrine\MongoDB\Connection;
 use Mongrate\Configuration;
 use Mongrate\Migration\Name;
 use Mongrate\Service\MigrationService;
@@ -22,10 +20,7 @@ class BaseCommand extends Command
      */
     protected $configuration;
 
-    /**
-     * @var \Doctrine\MongoDB\Database
-     */
-    protected $db;
+    protected $service;
 
     /**
      * @param string $name   Optional.
@@ -44,7 +39,6 @@ class BaseCommand extends Command
 
         $this->configuration = new Configuration($params);
         $this->service = new MigrationService($this->configuration);
-        $this->setupDatabaseConnection();
     }
 
     private function getDefaultConfigurationParams()
@@ -67,13 +61,6 @@ class BaseCommand extends Command
         }
 
         throw new \RuntimeException('Config file not found in `config/parameters.yml` or `/etc/mongrate.yml`');
-    }
-
-    protected function setupDatabaseConnection()
-    {
-        $config = new DoctrineConfiguration();
-        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
-        $this->db = $conn->selectDatabase($this->configuration->getDatabaseName());
     }
 
     /**
@@ -101,6 +88,6 @@ class BaseCommand extends Command
      */
     protected function getAppliedCollection()
     {
-        return $this->db->selectCollection('MongrateMigrations');
+        return $this->service->selectCollection('MongrateMigrations');
     }
 }

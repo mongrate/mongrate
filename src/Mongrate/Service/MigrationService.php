@@ -2,6 +2,8 @@
 
 namespace Mongrate\Service;
 
+use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
+use Doctrine\MongoDB\Connection;
 use Mongrate\Configuration;
 use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,9 +19,25 @@ class MigrationService
      */
     private $configuration;
 
+    /**
+     * @var \Doctrine\MongoDB\Database
+     */
+    private $database;
+
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
+        $this->setupDatabaseConnection();
+    }
+
+    private function setupDatabaseConnection()
+    {
+        $connection = new Connection(
+            $this->configuration->getDatabaseServerUri(),
+            [],
+            new DoctrineConfiguration()
+        );
+        $this->database = $connection->selectDatabase($this->configuration->getDatabaseName());
     }
 
     public function ensureMigrationsDirectoryExists()
@@ -39,5 +57,15 @@ class MigrationService
             $this->configuration->getMigrationsDirectory(),
             $name
         );
+    }
+
+    public function getDatabase()
+    {
+        return $this->database;
+    }
+
+    public function selectCollection($collectionName)
+    {
+        return $this->database->selectCollection($collectionName);
     }
 }
