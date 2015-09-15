@@ -6,6 +6,7 @@ use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
 use Doctrine\MongoDB\Connection;
 use Mongrate\Configuration;
 use Mongrate\Migration\Name;
+use Mongrate\Service\MigrationService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Parser;
 
@@ -16,6 +17,8 @@ class BaseCommand extends Command
      * by a wrapper like MongrateBundle.
      *
      * @var \Mongrate\Configuration
+     *
+     * @todo - remove this in favour of directly accessing the service object.
      */
     protected $configuration;
 
@@ -40,7 +43,7 @@ class BaseCommand extends Command
         }
 
         $this->configuration = new Configuration($params);
-
+        $this->service = new MigrationService($this->configuration);
         $this->setupDatabaseConnection();
     }
 
