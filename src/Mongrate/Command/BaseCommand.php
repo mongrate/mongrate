@@ -2,8 +2,9 @@
 
 namespace Mongrate\Command;
 
-use Doctrine\MongoDB\Configuration;
+use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
 use Doctrine\MongoDB\Connection;
+use Mongrate\Configuration;
 use Mongrate\Migration\Name;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Parser;
@@ -11,12 +12,12 @@ use Symfony\Component\Yaml\Parser;
 class BaseCommand extends Command
 {
     /**
-     * Configuration, either read from the `parameters.yml` file or given by a wrapper like
-     * MongrateBundle.
+     * Configuration, either read from `/etc/mongrate.yml`, from the `parameters.yml` file or given
+     * by a wrapper like MongrateBundle.
      *
-     * @var array
+     * @var \Mongrate\Configuration
      */
-    protected $params;
+    protected $configuration;
 
     /**
      * @var \Doctrine\MongoDB\Database
@@ -33,12 +34,12 @@ class BaseCommand extends Command
         parent::__construct($name);
 
         if (is_array($params)) {
-            $this->params = $params;
+            $params = $params;
         } else {
-            $this->params = $this->getDefaultConfigurationParams();
+            $params = $this->getDefaultConfigurationParams();
         }
 
-        $this->cleanConfigurationParams();
+        $this->configuration = new Configuration($params);
 
         $this->setupDatabaseConnection();
     }
@@ -65,23 +66,20 @@ class BaseCommand extends Command
         throw new \RuntimeException('Config file not found in `config/parameters.yml` or `/etc/mongrate.yml`');
     }
 
-    private function cleanConfigurationParams()
-    {
-        // Trim trailing slashes so this can be configured with or without trailing slashes without
-        // it making a difference.
-        $this->params['migrations_directory'] = rtrim($this->params['migrations_directory'], '/');
-    }
-
     protected function setupDatabaseConnection()
     {
-        $config = new Configuration();
-        $conn = new Connection($this->params['mongodb_server'], [], $config);
-        $this->db = $conn->selectDatabase($this->params['mongodb_db']);
+        $config = new DoctrineConfiguration();
+        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
+        $this->db = $conn->selectDatabase($this->configuration->getDatabaseName());
     }
 
     protected function getMigrationClassFileFromName($name)
     {
-        return $this->params['migrations_directory'] . '/' . $name . '/Migration.php';
+        return sprintf(
+            '%s/%s/Migration.php',
+            $this->configuration->getMigrationsDirectory(),
+            $name
+        );
     }
 
     /**
