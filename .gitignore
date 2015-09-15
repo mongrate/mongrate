@@ -4,3 +4,4 @@ config/parameters.yml
 composer.lock
 /bin/
 /build/
+.idea
