@@ -59,7 +59,7 @@ class BaseMigrationCommand extends BaseCommand
      */
     protected function loadMigrationClass(Name $className)
     {
-        $file = $this->getMigrationClassFileFromName($className);
+        $file = $this->service->getMigrationClassFileFromName($this->migrationName);
         if (file_exists($file)) {
             require_once $file;
         } else {

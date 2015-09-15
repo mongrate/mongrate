@@ -31,4 +31,13 @@ class MigrationService
             );
         }
     }
+
+    public function getMigrationClassFileFromName(Name $name)
+    {
+        return sprintf(
+            '%s/%s/Migration.php',
+            $this->configuration->getMigrationsDirectory(),
+            $name
+        );
+    }
 }

@@ -42,7 +42,7 @@ class TestMigrationCommand extends BaseCommand
             ? new Direction($input->getArgument('direction'))
             : null;
 
-        $classFile = $this->getMigrationClassFileFromName($name);
+        $classFile = $this->service->getMigrationClassFileFromName($name);
         if (file_exists($classFile)) {
             require_once $classFile;
         } else {

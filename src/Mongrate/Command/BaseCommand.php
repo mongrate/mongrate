@@ -76,15 +76,6 @@ class BaseCommand extends Command
         $this->db = $conn->selectDatabase($this->configuration->getDatabaseName());
     }
 
-    protected function getMigrationClassFileFromName($name)
-    {
-        return sprintf(
-            '%s/%s/Migration.php',
-            $this->configuration->getMigrationsDirectory(),
-            $name
-        );
-    }
-
     /**
      * Check if the migration has been applied.
      *
