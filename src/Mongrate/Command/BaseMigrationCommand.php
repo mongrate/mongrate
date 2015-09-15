@@ -24,22 +24,53 @@ class BaseMigrationCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        $this->setOutput($output);
         $this->migrationName = new Name($input->getArgument('name'));
-        $this->fullClassName = 'Mongrate\Migrations\\' . $this->migrationName;
+        $this->setMigrationName($this->migrationName);
 
-        $file = $this->getMigrationClassFileFromName($this->migrationName);
+        $this->loadMigrationClass($this->migrationName);
+    }
+
+    /**
+     * @param Name $className
+     *
+     * @return string
+     */
+    private function generateFullClassName(Name $className)
+    {
+        return 'Mongrate\Migrations\\' . $className;
+    }
+
+    /**
+     * @param $migrationName
+     */
+    protected function setMigrationName(Name $migrationName)
+    {
+        $this->className = $migrationName;
+        $this->fullClassName = $this->generateFullClassName($this->className);
+    }
+
+    /**
+     * Loads the migration class using the className.
+     *
+     * @param Name $className
+     *
+     * @throws MigrationDoesntExist
+     */
+    protected function loadMigrationClass(Name $className)
+    {
+        $file = $this->getMigrationClassFileFromName($className);
         if (file_exists($file)) {
             require_once $file;
         } else {
-            throw new MigrationDoesntExist($this->migrationName, $file);
+            throw new MigrationDoesntExist($className, $file);
         }
     }
 
     /**
      * Migrate up or down.
      *
-     * @param string $direction
+     * @param Direction $direction
      */
     protected function migrate(Direction $direction)
     {
@@ -62,7 +93,6 @@ class BaseMigrationCommand extends BaseCommand
     /**
      * Update the database to record whether or not the migration has been applied.
      *
-     * @param string  $migration
      * @param boolean $isApplied
      */
     private function setMigrationApplied($isApplied)
@@ -71,5 +101,17 @@ class BaseMigrationCommand extends BaseCommand
         $criteria = ['className' => (string) $this->migrationName];
         $newObj = ['$set' => ['className' => (string) $this->migrationName, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return $this
+     */
+    protected function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
+
+        return $this;
     }
 }
