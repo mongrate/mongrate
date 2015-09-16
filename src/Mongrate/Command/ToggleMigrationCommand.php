@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Migration\Direction;
+use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,14 +19,14 @@ class ToggleMigrationCommand extends BaseMigrationCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        parent::execute($input, $output);
+        $name = new Name($input->getArgument('name'));
 
-        $isAlreadyApplied = $this->service->isMigrationApplied($this->migrationName);
+        $isAlreadyApplied = $this->service->isMigrationApplied($name);
 
         if ($isAlreadyApplied === true) {
-            $this->migrate(Direction::down());
+            $this->service->migrate($name, Direction::down(), $output);
         } else {
-            $this->migrate(Direction::up());
+            $this->service->migrate($name, Direction::up(), $output);
         }
     }
 }

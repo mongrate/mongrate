@@ -5,6 +5,8 @@ namespace Mongrate\Service;
 use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
 use Doctrine\MongoDB\Connection;
 use Mongrate\Configuration;
+use Mongrate\Exception\MigrationDoesntExist;
+use Mongrate\Migration\Direction;
 use Mongrate\Migration\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,6 +88,8 @@ class MigrationService
      */
     public function isMigrationApplied(Name $name)
     {
+        $this->ensureMigrationExists($name);
+
         $collection = $this->getAppliedCollection();
         $criteria = ['className' => (string) $name];
         $record = $collection->find($criteria)->getSingleResult();
@@ -95,5 +99,78 @@ class MigrationService
         } else {
             return (bool) $record['isApplied'];
         }
+    }
+
+    /**
+     * Migrate up or down.
+     *
+     * @param Direction $direction
+     */
+    public function migrate(Name $name, Direction $direction, OutputInterface $output)
+    {
+        $this->loadMigrationClass($name);
+
+        $fullClassName = $this->generateFullClassName($name);
+        $migration = new $fullClassName();
+
+        $output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $name . '</comment>');
+
+        if ($direction->isUp()) {
+            $migration->up($this->database);
+            $this->setMigrationApplied($name, true);
+        } else {
+            $migration->down($this->database);
+            $this->setMigrationApplied($name, false);
+        }
+
+        $output->writeln('<info>Migrated ' . $direction . '</info>');
+    }
+
+    /**
+     * @param  Name $name
+     * @throws MigrationDoesntExist
+     */
+    private function ensureMigrationExists(Name $name)
+    {
+        $file = $this->getMigrationClassFileFromName($name);
+
+        if (!file_exists($file)) {
+            throw new MigrationDoesntExist($name, $file);
+        }
+    }
+
+    /**
+     * Loads the migration class using the migration name.
+     *
+     * @param Name $name
+     * @throws MigrationDoesntExist
+     */
+    private function loadMigrationClass(Name $name)
+    {
+        $this->ensureMigrationExists($name);
+
+        require_once $this->getMigrationClassFileFromName($name);
+    }
+
+    /**
+     * @param Name $name
+     * @return string
+     */
+    private function generateFullClassName(Name $name)
+    {
+        return 'Mongrate\Migrations\\' . $name;
+    }
+
+    /**
+     * Update the database to record whether or not the migration has been applied.
+     *
+     * @param boolean $isApplied
+     */
+    private function setMigrationApplied(Name $name, $isApplied)
+    {
+        $collection = $this->getAppliedCollection();
+        $criteria = ['className' => (string) $name];
+        $newObj = ['$set' => ['className' => (string) $name, 'isApplied' => $isApplied]];
+        $collection->upsert($criteria, $newObj);
     }
 }
