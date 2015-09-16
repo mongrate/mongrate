@@ -66,6 +66,17 @@ class MigrationService
         return $this->database;
     }
 
+    public function getDatabaseForTestingMigration(Name $name)
+    {
+        $connection = new Connection(
+            $this->configuration->getDatabaseServerUri(),
+            [],
+            new DoctrineConfiguration()
+        );
+
+        return $connection->selectDatabase('mongrate_test_' . $name);
+    }
+
     public function selectCollection($collectionName)
     {
         return $this->database->selectCollection($collectionName);

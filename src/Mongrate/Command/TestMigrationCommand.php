@@ -49,9 +49,7 @@ class TestMigrationCommand extends BaseCommand
             throw new MigrationDoesntExist($name, $classFile);
         }
 
-        $config = new Configuration();
-        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
-        $this->db = $conn->selectDatabase('mongrate_test_' . $name);
+        $this->db = $this->service->getDatabaseForTestingMigration($name);
 
         if ($direction) {
             $this->test($name, $direction);
