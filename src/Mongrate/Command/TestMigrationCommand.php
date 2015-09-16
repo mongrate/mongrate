@@ -50,7 +50,7 @@ class TestMigrationCommand extends BaseCommand
         }
 
         $config = new Configuration();
-        $conn = new Connection($this->params['mongodb_server'], [], $config);
+        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
         $this->db = $conn->selectDatabase('mongrate_test_' . $name);
 
         if ($direction) {
@@ -63,7 +63,7 @@ class TestMigrationCommand extends BaseCommand
 
     private function test(Name $name, Direction $direction)
     {
-        $testsDirectory = $this->params['migrations_directory'] . '/' . $name . '/';
+        $testsDirectory = $this->configuration->getMigrationsDirectory() . '/' . $name . '/';
         $inputFile = $testsDirectory . $direction . '-input.yml';
         $verifierFile = $testsDirectory . $direction . '-verifier.yml';
 

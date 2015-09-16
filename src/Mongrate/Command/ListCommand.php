@@ -22,7 +22,7 @@ class ListCommand extends BaseCommand
     {
         $this->ensureMigrationsDirectoryExists();
 
-        $iterator = new \DirectoryIterator($this->params['migrations_directory']);
+        $iterator = new \DirectoryIterator($this->configuration->getMigrationsDirectory());
         $migrations = [];
 
         foreach ($iterator as $file) {
@@ -55,8 +55,8 @@ class ListCommand extends BaseCommand
 
     private function ensureMigrationsDirectoryExists()
     {
-        if (!is_dir($this->params['migrations_directory'])) {
-            throw new \RuntimeException('The migrations directory does not exist. It is configured to be in: ' . $this->params['migrations_directory']);
+        if (!is_dir($this->configuration->getMigrationsDirectory())) {
+            throw new \RuntimeException('The migrations directory does not exist. It is configured to be in: ' . $this->configuration->getMigrationsDirectory());
         }
     }
 }
