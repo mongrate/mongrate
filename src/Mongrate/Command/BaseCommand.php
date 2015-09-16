@@ -70,7 +70,7 @@ class BaseCommand extends Command
      */
     protected function isMigrationApplied(Name $name)
     {
-        $collection = $this->getAppliedCollection();
+        $collection = $this->service->getAppliedCollection();
         $criteria = ['className' => (string) $name];
         $record = $collection->find($criteria)->getSingleResult();
 
@@ -79,15 +79,5 @@ class BaseCommand extends Command
         } else {
             return (bool) $record['isApplied'];
         }
-    }
-
-    /**
-     * Update the database to record whether or not the migration has been applied.
-     *
-     * @return \Doctrine\MongoDB\Collection
-     */
-    protected function getAppliedCollection()
-    {
-        return $this->service->selectCollection('MongrateMigrations');
     }
 }

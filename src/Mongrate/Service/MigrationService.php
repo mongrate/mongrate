@@ -68,4 +68,14 @@ class MigrationService
     {
         return $this->database->selectCollection($collectionName);
     }
+
+    /**
+     * Get the collection which records whether a migration has been applied.
+     *
+     * @return \Doctrine\MongoDB\Collection
+     */
+    public function getAppliedCollection()
+    {
+        return $this->database->selectCollection('MongrateMigrations');
+    }
 }

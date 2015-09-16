@@ -97,7 +97,7 @@ class BaseMigrationCommand extends BaseCommand
      */
     private function setMigrationApplied($isApplied)
     {
-        $collection = $this->getAppliedCollection();
+        $collection = $this->service->getAppliedCollection();
         $criteria = ['className' => (string) $this->migrationName];
         $newObj = ['$set' => ['className' => (string) $this->migrationName, 'isApplied' => $isApplied]];
         $collection->upsert($criteria, $newObj);
