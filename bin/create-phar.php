@@ -36,7 +36,11 @@ $finder->files()
     ->in('vendor/symfony/yaml');
 
 foreach ($finder as $file) {
-    $phar->addFile($file->getPathName());
+    // Stripping whitespace from the file reduces the Phar file size by over 50% on first test
+    // (from 1.5 MB to 679 KB).
+    $minifiedPhp = php_strip_whitespace((string) $file->getPathName());
+
+    $phar->addFromString($file->getPathName(), $minifiedPhp);
 }
 
 $finder = new Finder();
