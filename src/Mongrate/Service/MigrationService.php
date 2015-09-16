@@ -127,6 +127,34 @@ class MigrationService
     }
 
     /**
+     * Get a list of all migrations, sorted alphabetically.
+     *
+     * @return array<Name>
+     */
+    public function getAllMigrations()
+    {
+        $iterator = new \DirectoryIterator($this->configuration->getMigrationsDirectory());
+        $migrations = [];
+
+        foreach ($iterator as $file) {
+            $file = (string) $file;
+            if ($file === '.'|| $file === '..') {
+                continue;
+            }
+
+            $name = new Name($file);
+
+            $migrations[] = $name;
+        }
+
+        usort($migrations, function (Name $a, Name $b) {
+            return strcmp((string) $a, (string) $b);
+        });
+
+        return $migrations;
+    }
+
+    /**
      * @param  Name $name
      * @throws MigrationDoesntExist
      */
