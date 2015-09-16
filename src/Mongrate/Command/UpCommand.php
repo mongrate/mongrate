@@ -30,7 +30,7 @@ class UpCommand extends BaseMigrationCommand
     {
         parent::execute($input, $output);
 
-        $isAlreadyApplied = $this->isMigrationApplied($this->migrationName);
+        $isAlreadyApplied = $this->service->isMigrationApplied($this->migrationName);
 
         $force = $input->getOption('force');
 

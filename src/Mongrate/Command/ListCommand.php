@@ -35,7 +35,7 @@ class ListCommand extends BaseCommand
 
             $migrations[] = [
                 'name' => $name,
-                'isApplied' => $this->isMigrationApplied($name),
+                'isApplied' => $this->service->isMigrationApplied($name),
             ];
         }
 

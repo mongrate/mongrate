@@ -78,4 +78,22 @@ class MigrationService
     {
         return $this->database->selectCollection('MongrateMigrations');
     }
+
+    /**
+     * Check if a migration has been applied.
+     *
+     * @param boolean $isApplied True if applied, false if not.
+     */
+    public function isMigrationApplied(Name $name)
+    {
+        $collection = $this->getAppliedCollection();
+        $criteria = ['className' => (string) $name];
+        $record = $collection->find($criteria)->getSingleResult();
+
+        if ($record === null) {
+            return false;
+        } else {
+            return (bool) $record['isApplied'];
+        }
+    }
 }

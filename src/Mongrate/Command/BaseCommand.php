@@ -62,22 +62,4 @@ class BaseCommand extends Command
 
         throw new \RuntimeException('Config file not found in `config/parameters.yml` or `/etc/mongrate.yml`');
     }
-
-    /**
-     * Check if the migration has been applied.
-     *
-     * @param boolean $isApplied True if applied, false if not.
-     */
-    protected function isMigrationApplied(Name $name)
-    {
-        $collection = $this->service->getAppliedCollection();
-        $criteria = ['className' => (string) $name];
-        $record = $collection->find($criteria)->getSingleResult();
-
-        if ($record === null) {
-            return false;
-        } else {
-            return (bool) $record['isApplied'];
-        }
-    }
 }
