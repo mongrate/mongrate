@@ -10,16 +10,6 @@ use Symfony\Component\Yaml\Parser;
 
 class BaseCommand extends Command
 {
-    /**
-     * Configuration, either read from `/etc/mongrate.yml`, from the `parameters.yml` file or given
-     * by a wrapper like MongrateBundle.
-     *
-     * @var \Mongrate\Configuration
-     *
-     * @todo - remove this in favour of directly accessing the service object.
-     */
-    protected $configuration;
-
     protected $service;
 
     /**
@@ -37,8 +27,8 @@ class BaseCommand extends Command
             $params = $this->getDefaultConfigurationParams();
         }
 
-        $this->configuration = new Configuration($params);
-        $this->service = new MigrationService($this->configuration);
+        $configuration = new Configuration($params);
+        $this->service = new MigrationService($configuration);
     }
 
     private function getDefaultConfigurationParams()

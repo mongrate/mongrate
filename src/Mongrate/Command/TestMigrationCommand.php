@@ -61,7 +61,10 @@ class TestMigrationCommand extends BaseCommand
 
     private function test(Name $name, Direction $direction)
     {
-        $testsDirectory = $this->configuration->getMigrationsDirectory() . '/' . $name . '/';
+        $testsDirectory = $this->service->getConfiguration()->getMigrationsDirectory()
+            . '/'
+            . $name
+            . '/';
         $inputFile = $testsDirectory . $direction . '-input.yml';
         $verifierFile = $testsDirectory . $direction . '-verifier.yml';
 

@@ -66,6 +66,11 @@ class MigrationService
         return $this->database;
     }
 
+    public function getConfiguration()
+    {
+        return $this->configuration;
+    }
+
     public function getDatabaseForTestingMigration(Name $name)
     {
         $connection = new Connection(
