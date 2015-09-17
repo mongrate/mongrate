@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Migration\Name;
+use Mongrate\Model\Migration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -21,14 +22,13 @@ class ListCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->service->ensureMigrationsDirectoryExists();
-
         $migrations = $this->service->getAllMigrations();
 
         foreach ($migrations as $migration) {
-            if ($this->service->isMigrationApplied($migration)) {
-                $output->writeln(sprintf('<comment>%s</comment> <info>applied</info>', (string) $migration));
+            if ($migration->isApplied()) {
+                $output->writeln(sprintf('<comment>%s</comment> <info>applied</info>', $migration->getName()));
             } else {
-                $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', (string) $migration));
+                $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', $migration->getName()));
             }
         }
     }

@@ -8,6 +8,7 @@ use Mongrate\Configuration;
 use Mongrate\Exception\MigrationDoesntExist;
 use Mongrate\Migration\Direction;
 use Mongrate\Migration\Name;
+use Mongrate\Model\Migration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -52,6 +53,11 @@ class MigrationService
         }
     }
 
+    /**
+     * @param Name $name
+     *
+     * @return string
+     */
     public function getMigrationClassFileFromName(Name $name)
     {
         return sprintf(
@@ -61,16 +67,27 @@ class MigrationService
         );
     }
 
+    /**
+     * @return \Doctrine\MongoDB\Database
+     */
     public function getDatabase()
     {
         return $this->database;
     }
 
+    /**
+     * @return Configuration
+     */
     public function getConfiguration()
     {
         return $this->configuration;
     }
 
+    /**
+     * @param Name $name
+     *
+     * @return \Doctrine\MongoDB\Database
+     */
     public function getDatabaseForTestingMigration(Name $name)
     {
         $connection = new Connection(
@@ -82,6 +99,11 @@ class MigrationService
         return $connection->selectDatabase('mongrate_test_' . $name);
     }
 
+    /**
+     * @param $collectionName
+     *
+     * @return \Doctrine\MongoDB\Collection
+     */
     public function selectCollection($collectionName)
     {
         return $this->database->selectCollection($collectionName);
@@ -100,7 +122,9 @@ class MigrationService
     /**
      * Check if a migration has been applied.
      *
-     * @param boolean $isApplied True if applied, false if not.
+     * @param Name $name name of the migration.
+     *
+     * @return bool
      */
     public function isMigrationApplied(Name $name)
     {
@@ -145,7 +169,7 @@ class MigrationService
     /**
      * Get a list of all migrations, sorted alphabetically.
      *
-     * @return array<Name>
+     * @return Migration[]
      */
     public function getAllMigrations()
     {
@@ -159,15 +183,35 @@ class MigrationService
             }
 
             $name = new Name($file);
+            $isApplied = $this->isMigrationApplied($name);
 
-            $migrations[] = $name;
+            $migrations[] = new Migration($name, $isApplied);
         }
 
-        usort($migrations, function (Name $a, Name $b) {
-            return strcmp((string) $a, (string) $b);
+        usort($migrations, function (Migration $a, Migration $b) {
+            return strcmp($a->getName(), $b->getName());
         });
 
         return $migrations;
+    }
+    
+    /**
+     * Return array with all migrations that were note applied.
+     *
+     * @return Migration[]
+     */
+    public function getMigrationsNotApplied()
+    {
+        $migrationsNotApplied = [];
+        $migrations = $this->getAllMigrations();
+
+        foreach ($migrations as $migration) {
+            if (!$migration->isApplied()) {
+                $migrationsNotApplied[] = $migration;
+            }
+        }
+
+        return $migrationsNotApplied;
     }
 
     /**
