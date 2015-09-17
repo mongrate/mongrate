@@ -20,43 +20,16 @@ class ListCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->ensureMigrationsDirectoryExists();
+        $this->service->ensureMigrationsDirectoryExists();
 
-        $iterator = new \DirectoryIterator($this->configuration->getMigrationsDirectory());
-        $migrations = [];
-
-        foreach ($iterator as $file) {
-            $file = (string) $file;
-            if ($file === '.'|| $file === '..') {
-                continue;
-            }
-
-            $name = new Name($file);
-
-            $migrations[] = [
-                'name' => $name,
-                'isApplied' => $this->isMigrationApplied($name),
-            ];
-        }
-
-        // Sort the migrations alphabetically so the list is easier to scan.
-        usort($migrations, function ($a, $b) {
-            return strcmp($a['name'], $b['name']);
-        });
+        $migrations = $this->service->getAllMigrations();
 
         foreach ($migrations as $migration) {
-            if ($migration['isApplied']) {
-                $output->writeln(sprintf('<comment>%s</comment> <info>applied</info>', $migration['name']));
+            if ($this->service->isMigrationApplied($migration)) {
+                $output->writeln(sprintf('<comment>%s</comment> <info>applied</info>', (string) $migration));
             } else {
-                $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', $migration['name']));
+                $output->writeln(sprintf('<comment>%s</comment> <error>not applied</error>', (string) $migration));
             }
-        }
-    }
-
-    private function ensureMigrationsDirectoryExists()
-    {
-        if (!is_dir($this->configuration->getMigrationsDirectory())) {
-            throw new \RuntimeException('The migrations directory does not exist. It is configured to be in: ' . $this->configuration->getMigrationsDirectory());
         }
     }
 }

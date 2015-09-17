@@ -42,16 +42,14 @@ class TestMigrationCommand extends BaseCommand
             ? new Direction($input->getArgument('direction'))
             : null;
 
-        $classFile = $this->getMigrationClassFileFromName($name);
+        $classFile = $this->service->getMigrationClassFileFromName($name);
         if (file_exists($classFile)) {
             require_once $classFile;
         } else {
             throw new MigrationDoesntExist($name, $classFile);
         }
 
-        $config = new Configuration();
-        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
-        $this->db = $conn->selectDatabase('mongrate_test_' . $name);
+        $this->db = $this->service->getDatabaseForTestingMigration($name);
 
         if ($direction) {
             $this->test($name, $direction);
@@ -63,7 +61,10 @@ class TestMigrationCommand extends BaseCommand
 
     private function test(Name $name, Direction $direction)
     {
-        $testsDirectory = $this->configuration->getMigrationsDirectory() . '/' . $name . '/';
+        $testsDirectory = $this->service->getConfiguration()->getMigrationsDirectory()
+            . '/'
+            . $name
+            . '/';
         $inputFile = $testsDirectory . $direction . '-input.yml';
         $verifierFile = $testsDirectory . $direction . '-verifier.yml';
 
@@ -78,7 +79,7 @@ class TestMigrationCommand extends BaseCommand
         $fixtures = $yaml->parse(file_get_contents($fixturesFile));
 
         foreach ($fixtures as $collectionName => $collectionFixtures) {
-            $collection = $this->db->selectCollection($collectionName);
+            $collection = $this->service->selectCollection($collectionName);
 
             // Start off with an empty collection by removing all rows with an empty query.
             $collection->remove([]);
@@ -98,10 +99,10 @@ class TestMigrationCommand extends BaseCommand
 
         if ($direction->isUp()) {
             $this->output->writeln('<info>Testing ' . $name . ' going up.</info>');
-            $migration->up($this->db);
+            $migration->up($this->service->getDatabase());
         } elseif ($direction->isDown()) {
             $this->output->writeln('<info>Testing ' . $name . ' going down.</info>');
-            $migration->down($this->db);
+            $migration->down($this->service->getDatabase());
         }
     }
 
@@ -111,7 +112,7 @@ class TestMigrationCommand extends BaseCommand
         $verifier = $yaml->parse(file_get_contents($verifierFile));
 
         foreach ($verifier as $collectionName => $verifierObjects) {
-            $collection = $this->db->selectCollection($collectionName);
+            $collection = $this->service->selectCollection($collectionName);
 
             $verifierObjects = array_map([$this, 'convertYmlStringToNativeMongoObjects'], $verifierObjects);
             $verifierObjects = $this->normalizeObject($verifierObjects);

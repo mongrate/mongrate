@@ -2,27 +2,15 @@
 
 namespace Mongrate\Command;
 
-use Doctrine\MongoDB\Configuration as DoctrineConfiguration;
-use Doctrine\MongoDB\Connection;
 use Mongrate\Configuration;
 use Mongrate\Migration\Name;
+use Mongrate\Service\MigrationService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Parser;
 
 class BaseCommand extends Command
 {
-    /**
-     * Configuration, either read from `/etc/mongrate.yml`, from the `parameters.yml` file or given
-     * by a wrapper like MongrateBundle.
-     *
-     * @var \Mongrate\Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @var \Doctrine\MongoDB\Database
-     */
-    protected $db;
+    protected $service;
 
     /**
      * @param string $name   Optional.
@@ -39,9 +27,8 @@ class BaseCommand extends Command
             $params = $this->getDefaultConfigurationParams();
         }
 
-        $this->configuration = new Configuration($params);
-
-        $this->setupDatabaseConnection();
+        $configuration = new Configuration($params);
+        $this->service = new MigrationService($configuration);
     }
 
     private function getDefaultConfigurationParams()
@@ -64,49 +51,5 @@ class BaseCommand extends Command
         }
 
         throw new \RuntimeException('Config file not found in `config/parameters.yml` or `/etc/mongrate.yml`');
-    }
-
-    protected function setupDatabaseConnection()
-    {
-        $config = new DoctrineConfiguration();
-        $conn = new Connection($this->configuration->getDatabaseServerUri(), [], $config);
-        $this->db = $conn->selectDatabase($this->configuration->getDatabaseName());
-    }
-
-    protected function getMigrationClassFileFromName($name)
-    {
-        return sprintf(
-            '%s/%s/Migration.php',
-            $this->configuration->getMigrationsDirectory(),
-            $name
-        );
-    }
-
-    /**
-     * Check if the migration has been applied.
-     *
-     * @param boolean $isApplied True if applied, false if not.
-     */
-    protected function isMigrationApplied(Name $name)
-    {
-        $collection = $this->getAppliedCollection();
-        $criteria = ['className' => (string) $name];
-        $record = $collection->find($criteria)->getSingleResult();
-
-        if ($record === null) {
-            return false;
-        } else {
-            return (bool) $record['isApplied'];
-        }
-    }
-
-    /**
-     * Update the database to record whether or not the migration has been applied.
-     *
-     * @return \Doctrine\MongoDB\Collection
-     */
-    protected function getAppliedCollection()
-    {
-        return $this->db->selectCollection('MongrateMigrations');
     }
 }

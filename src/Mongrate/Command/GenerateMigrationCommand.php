@@ -20,7 +20,7 @@ class GenerateMigrationCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = new Name($input->getArgument('name') . '_' . date('Ymd'));
-        $targetDirectory = dirname($this->getMigrationClassFileFromName($name));
+        $targetDirectory = dirname($this->service->getMigrationClassFileFromName($name));
 
         if (is_dir($targetDirectory)) {
             throw new DuplicateMigrationName($name);
