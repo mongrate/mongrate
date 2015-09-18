@@ -19,6 +19,8 @@ $app->add(new \Mongrate\Command\DownCommand);
 $app->add(new \Mongrate\Command\GenerateMigrationCommand);
 $app->add(new \Mongrate\Command\ListCommand);
 $app->add(new \Mongrate\Command\TestMigrationCommand);
+$app->add(new \Mongrate\Command\UpAllCommand);
+
 $app->setName('Mongrate migration tool');
 
 if (defined('MONGRATE_VERSION')) {
