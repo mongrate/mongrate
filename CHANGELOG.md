@@ -1,6 +1,16 @@
 Changelog
 =========
 
+**1.4.0**
+
+* The project has a new official website: http://mongrate.com/
+* Added new command, `up-all`, which applies all remaining migrations.
+* New recommended method of installation that doesn't require the downloading of the source code.
+  See [mongrate.com/docs/installation](http://mongrate.com/docs/installation)
+* New recommended method of configuration: `/etc/mongrate.yml`.
+  See [mongrate.com/docs/installation](http://mongrate.com/docs/installation)
+* Internal refactoring allows extension of a service, and re-use of code internally.
+
 **1.3.10**
 
 * Added `--force` option to the `up` and `down` commands.
