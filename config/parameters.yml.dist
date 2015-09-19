@@ -1,7 +1,9 @@
 parameters:
+    # The host and port of your database.
     mongodb_server: 'mongodb://localhost:27017'
+
+    # Your database's name.
     mongodb_db: my_db
 
     # The directory where your migration files are to be kept.
-    # Don't add a trailing slash.
     migrations_directory: migrations

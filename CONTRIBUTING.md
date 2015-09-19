@@ -35,3 +35,13 @@ The tests use a database called `mongrate_test` in your local MongoDB server.
 Run `bin/create-phar.php` and a new Phar file will be created.
 
 The Phar cannot be compressed; otherwise the file cannot be run directly in bash.
+
+## Distribution
+
+Assuming you have an entry called `mongratedownloads` in your `~/.ssh/config`:
+
+```bash
+bin/create-phar.php
+scp build/mongrate.phar mongratedownloads:/home/mongrate/project/downloads/mongrate.phar
+scp config/parameters.yml.dist mongratedownloads:/home/mongrate/project/downloads/sample-config.yml
+```
