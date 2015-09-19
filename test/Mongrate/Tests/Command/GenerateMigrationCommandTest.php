@@ -12,6 +12,10 @@ class GenerateMigrationCommandTest extends BaseCommandTest
 
     private $commandTester;
 
+    private $expectedFile;
+
+    private $duplicateFile;
+
     public function setUp()
     {
         parent::setUp();

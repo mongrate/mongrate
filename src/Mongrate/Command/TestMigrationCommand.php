@@ -4,6 +4,7 @@ namespace Mongrate\Command;
 
 use Doctrine\MongoDB\Configuration;
 use Doctrine\MongoDB\Connection;
+use Mongrate\Exception\InvalidFixturesException;
 use Mongrate\Exception\MigrationDoesntExist;
 use Mongrate\Migration\Direction;
 use Mongrate\Migration\Name;
@@ -49,8 +50,6 @@ class TestMigrationCommand extends BaseCommand
             throw new MigrationDoesntExist($name, $classFile);
         }
 
-        $this->db = $this->service->getDatabaseForTestingMigration($name);
-
         if ($direction) {
             $this->test($name, $direction);
         } else {
@@ -75,8 +74,7 @@ class TestMigrationCommand extends BaseCommand
 
     private function addFixturesToDatabaseFromYamlFile($fixturesFile)
     {
-        $yaml = new Parser();
-        $fixtures = $yaml->parse(file_get_contents($fixturesFile));
+        $fixtures = $this->getFixturesFromYamlFile($fixturesFile);
 
         foreach ($fixtures as $collectionName => $collectionFixtures) {
             $collection = $this->service->selectCollection($collectionName);
@@ -108,8 +106,7 @@ class TestMigrationCommand extends BaseCommand
 
     private function verifyDatabaseAgainstYamlFile($verifierFile)
     {
-        $yaml = new Parser();
-        $verifier = $yaml->parse(file_get_contents($verifierFile));
+        $verifier = $this->getFixturesFromYamlFile($verifierFile);
 
         foreach ($verifier as $collectionName => $verifierObjects) {
             $collection = $this->service->selectCollection($collectionName);
@@ -236,5 +233,21 @@ class TestMigrationCommand extends BaseCommand
         // representation that will be put into MongoDB, not whether two PHP objects have the same
         // reference (two identical MongoDate objects would have different references, for example).
         return json_encode($expected) === json_encode($actual);
+    }
+
+    /**
+     * @param  string $fixturesFile
+     * @return array
+     */
+    private function getFixturesFromYamlFile($fixturesFile)
+    {
+        $yaml = new Parser();
+        $fixtures = $yaml->parse(file_get_contents($fixturesFile));
+
+        if (!is_array($fixtures)) {
+            throw new InvalidFixturesException('Your fixtures input or verified file must have an array at it\'s root.');
+        }
+
+        return $fixtures;
     }
 }

@@ -21,9 +21,7 @@ class BaseCommand extends Command
     {
         parent::__construct($name);
 
-        if (is_array($params)) {
-            $params = $params;
-        } else {
+        if (!is_array($params)) {
             $params = $this->getDefaultConfigurationParams();
         }
 

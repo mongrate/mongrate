@@ -30,7 +30,6 @@ class UpAllCommand extends BaseCommand
 
         foreach ($migrationsNotApplied as $migration) {
             $this->service->migrate($migration->getName(), Direction::up(), $output);
-            $hasMigrated = true;
         }
 
         $output->writeln('<info>All migrations have been applied.</info>');

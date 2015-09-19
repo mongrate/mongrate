@@ -4,3 +4,7 @@ imports:
 tools:
     external_code_coverage:
         timeout: 1200    # Timeout in seconds.
+
+filter:
+    excluded_paths:
+        - resources/
