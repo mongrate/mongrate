@@ -4,6 +4,14 @@
  * Create a console application with the Mongrate commands.
  */
 
+if (!extension_loaded('mongo')) {
+    // Instead of throwing a \RuntimeException, which isn't friendly when running the .phar file
+    // for the first time when trying to get set up, exit with an error message instead.
+    echo "The MongoDB extension must be installed.\n";
+    echo "See https://secure.php.net/manual/en/mongo.installation.php\n";
+    exit(1);
+}
+
 require_once 'vendor/autoload.php';
 
 $loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
