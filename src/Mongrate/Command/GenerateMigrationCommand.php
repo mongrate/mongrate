@@ -3,7 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\DuplicateMigrationName;
-use Mongrate\Migration\Name;
+use Mongrate\Model\Name;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;

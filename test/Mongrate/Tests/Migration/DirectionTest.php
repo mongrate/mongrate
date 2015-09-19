@@ -2,7 +2,7 @@
 
 namespace Mongrate\Tests\Migration;
 
-use Mongrate\Migration\Direction;
+use Mongrate\Model\Direction;
 
 class DirectionTest extends \PHPUnit_Framework_TestCase
 {

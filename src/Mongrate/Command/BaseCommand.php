@@ -3,7 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Configuration;
-use Mongrate\Migration\Name;
+use Mongrate\Model\Name;
 use Mongrate\Service\MigrationService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Parser;

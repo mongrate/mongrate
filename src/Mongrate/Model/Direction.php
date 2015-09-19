@@ -1,6 +1,6 @@
 <?php
 
-namespace Mongrate\Migration;
+namespace Mongrate\Model;
 
 use Mongrate\Exception\InvalidDirectionException;
 

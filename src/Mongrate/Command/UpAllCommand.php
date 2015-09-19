@@ -2,7 +2,7 @@
 
 namespace Mongrate\Command;
 
-use Mongrate\Migration\Direction;
+use Mongrate\Model\Direction;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

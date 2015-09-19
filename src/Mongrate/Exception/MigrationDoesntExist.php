@@ -2,7 +2,7 @@
 
 namespace Mongrate\Exception;
 
-use Mongrate\Migration\Name;
+use Mongrate\Model\Name;
 
 class MigrationDoesntExist extends \Exception
 {

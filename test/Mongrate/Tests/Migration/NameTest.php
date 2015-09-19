@@ -2,7 +2,7 @@
 
 namespace Mongrate\Tests\Migration;
 
-use Mongrate\Migration\Name;
+use Mongrate\Model\Name;
 
 class NameTest extends \PHPUnit_Framework_TestCase
 {

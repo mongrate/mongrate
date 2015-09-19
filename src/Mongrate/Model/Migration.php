@@ -2,7 +2,7 @@
 
 namespace Mongrate\Model;
 
-use Mongrate\Migration\Name;
+use Mongrate\Model\Name;
 
 class Migration
 {
