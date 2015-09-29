@@ -35,12 +35,7 @@ class MigrationService
 
     private function setupDatabaseConnection()
     {
-        $connection = new Connection(
-            $this->configuration->getDatabaseServerUri(),
-            [],
-            new DoctrineConfiguration()
-        );
-        $this->database = $connection->selectDatabase($this->configuration->getDatabaseName());
+        $this->switchToDatabase($this->configuration->getDatabaseName());
     }
 
     public function ensureMigrationsDirectoryExists()
@@ -73,6 +68,16 @@ class MigrationService
     public function getDatabase()
     {
         return $this->database;
+    }
+
+    public function switchToDatabase($databaseName)
+    {
+        $connection = new Connection(
+            $this->configuration->getDatabaseServerUri(),
+            [],
+            new DoctrineConfiguration()
+        );
+        $this->database = $connection->selectDatabase($databaseName);
     }
 
     /**

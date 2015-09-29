@@ -50,6 +50,8 @@ class TestMigrationCommand extends BaseCommand
             throw new MigrationDoesntExist($name, $classFile);
         }
 
+        $this->service->switchToDatabase('mongrate_test_' . $name);
+
         if ($direction) {
             $this->test($name, $direction);
         } else {
