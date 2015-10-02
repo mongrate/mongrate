@@ -180,12 +180,17 @@ class MigrationService
         $migrations = [];
 
         foreach ($iterator as $file) {
-            $file = (string) $file;
-            if ($file === '.'|| $file === '..') {
+            $fileName = (string) $file;
+
+            if ($fileName === '.'|| $fileName === '..') {
+                continue;
+            } else if (!is_dir($file->getpathName())) {
+                // Ignore files that might be in the migrations directory, like documentation or
+                // a .gitignore or .gitkeep file.
                 continue;
             }
 
-            $name = new Name($file);
+            $name = new Name($fileName);
             $isApplied = $this->isMigrationApplied($name);
 
             $migrations[] = new Migration($name, $isApplied);
