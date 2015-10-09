@@ -2,8 +2,6 @@
 
 namespace Mongrate\Command;
 
-use Doctrine\MongoDB\Configuration;
-use Doctrine\MongoDB\Connection;
 use Mongrate\Exception\InvalidFixturesException;
 use Mongrate\Exception\MigrationDoesntExist;
 use Mongrate\Model\Direction;
@@ -174,18 +172,19 @@ class TestMigrationCommand extends BaseCommand
      * be converted to a MongoDate object representing the Unix time "123". If an array is given,
      * this method is applied recursively to all of the array's values.
      *
-     * @param  mixed $value
+     * @param mixed $value
      * @return mixed
      */
     private function convertYmlStringToNativeMongoObjects($value)
     {
         if (is_array($value)) {
             return array_map([$this, 'convertYmlStringToNativeMongoObjects'], $value);
-        } else if (is_string($value)) {
+        } elseif (is_string($value)) {
             if (preg_match(self::$matchNativeMongoClass, $value, $matches) === 1) {
                 $nativeMongoClass = 'Mongo' . $matches[1];
                 return new $nativeMongoClass($matches[2]);
             }
+
             return $value;
         }
 
@@ -238,7 +237,7 @@ class TestMigrationCommand extends BaseCommand
     }
 
     /**
-     * @param  string $fixturesFile
+     * @param string $fixturesFile
      * @return array
      */
     private function getFixturesFromYamlFile($fixturesFile)

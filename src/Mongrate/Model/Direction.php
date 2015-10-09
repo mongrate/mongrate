@@ -12,7 +12,7 @@ class Direction
     private $direction;
 
     /**
-     * @param  string $direction
+     * @param string $direction
      * @throws InvalidDirectionException if the direction given is not valid.
      */
     public function __construct($direction)

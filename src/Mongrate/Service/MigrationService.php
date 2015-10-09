@@ -9,7 +9,6 @@ use Mongrate\Exception\MigrationDoesntExist;
 use Mongrate\Model\Direction;
 use Mongrate\Model\Name;
 use Mongrate\Model\Migration;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrationService
@@ -50,7 +49,6 @@ class MigrationService
 
     /**
      * @param Name $name
-     *
      * @return string
      */
     public function getMigrationClassFileFromName(Name $name)
@@ -105,7 +103,6 @@ class MigrationService
 
     /**
      * @param $collectionName
-     *
      * @return \Doctrine\MongoDB\Collection
      */
     public function selectCollection($collectionName)

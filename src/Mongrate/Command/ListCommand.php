@@ -3,7 +3,6 @@
 namespace Mongrate\Command;
 
 use Mongrate\Model\Name;
-use Mongrate\Model\Migration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

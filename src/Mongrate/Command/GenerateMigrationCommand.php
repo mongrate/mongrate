@@ -31,13 +31,13 @@ class GenerateMigrationCommand extends BaseCommand
         $iterator = new \DirectoryIterator(__DIR__ . '/../../../resources/migration-template/');
 
         foreach ($iterator as $file) {
-            if ($file->getFileName() === '.'|| $file->getFileName() === '..') {
+            if ($file->getFileName() === '.' || $file->getFileName() === '..') {
                 continue;
             }
 
             $template = file_get_contents($file->getPathName());
             $templated = strtr($template, [
-                '%class%' => $name
+                '%class%' => $name,
             ]);
             file_put_contents($targetDirectory . '/' . $file->getFileName(), $templated);
         }
