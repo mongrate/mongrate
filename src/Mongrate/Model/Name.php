@@ -46,6 +46,10 @@ class Name
      */
     private function validate($name)
     {
+        if (!is_string($name)) {
+            throw new InvalidNameException('Migration name must be a string, got ' . gettype($name));
+        }
+
         if (strlen($name) === 0) {
             throw new InvalidNameException('Migration name must not be empty');
         }

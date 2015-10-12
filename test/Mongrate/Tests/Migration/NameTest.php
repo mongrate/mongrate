@@ -37,4 +37,13 @@ class NameTest extends \PHPUnit_Framework_TestCase
     {
         new Name('ALongNameThatExceedsTheMaximumLengthXXXXXXXXXXXXXXXXXXXXXXXXX');
     }
+
+    /**
+     * @expectedException \Mongrate\Exception\InvalidNameException
+     * @expectedExceptionMessage must be a string, got integer
+     */
+    public function testThrowsExceptionIfNotAString()
+    {
+        new Name(42);
+    }
 }
