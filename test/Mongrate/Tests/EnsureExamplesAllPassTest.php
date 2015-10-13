@@ -3,6 +3,7 @@
 namespace Mongrate\Tests;
 
 use Mongrate\Command\TestMigrationCommand;
+use Mongrate\Enum\DirectionEnum;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Parser;
@@ -31,12 +32,12 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
 
     private function runGoingUp($migrationName)
     {
-        $this->runGoingUpOrDown($migrationName, 'up');
+        $this->runGoingUpOrDown($migrationName, DirectionEnum::UP);
     }
 
     private function runGoingDown($migrationName)
     {
-        $this->runGoingUpOrDown($migrationName, 'down');
+        $this->runGoingUpOrDown($migrationName, DirectionEnum::DOWN);
     }
 
     private function runGoingUpOrDown($migrationName, $direction)

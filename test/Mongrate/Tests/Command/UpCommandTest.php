@@ -3,6 +3,7 @@
 namespace Mongrate\Tests\Command;
 
 use Mongrate\Command\UpCommand;
+use Mongrate\Enum\DirectionEnum;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Parser;
@@ -24,7 +25,7 @@ class UpCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new UpCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('up');
+        $command = $application->find(DirectionEnum::UP);
         $commandTester = new CommandTester($command);
         $collection = $this->db->selectCollection('Company');
 
@@ -54,7 +55,7 @@ class UpCommandTest extends BaseCommandTest
         $application = new Application();
         $application->add(new UpCommand(null, $this->parametersFromYmlFile));
 
-        $command = $application->find('up');
+        $command = $application->find(DirectionEnum::UP);
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName(), 'name' => 'Elvis']);
     }
@@ -63,7 +64,7 @@ class UpCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new UpCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('up');
+        $command = $application->find(DirectionEnum::UP);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
@@ -77,7 +78,7 @@ class UpCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new UpCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('up');
+        $command = $application->find(DirectionEnum::UP);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);

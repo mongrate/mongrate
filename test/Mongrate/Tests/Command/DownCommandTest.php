@@ -3,6 +3,7 @@
 namespace Mongrate\Tests\Command;
 
 use Mongrate\Command\DownCommand;
+use Mongrate\Enum\DirectionEnum;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Parser;
@@ -24,7 +25,7 @@ class DownCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new DownCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('down');
+        $command = $application->find(DirectionEnum::DOWN);
         $commandTester = new CommandTester($command);
         $collection = $this->db->selectCollection('Company');
 
@@ -53,7 +54,7 @@ class DownCommandTest extends BaseCommandTest
         $application = new Application();
         $application->add(new DownCommand(null, $this->parametersFromYmlFile));
 
-        $command = $application->find('down');
+        $command = $application->find(DirectionEnum::DOWN);
         $commandTester = new CommandTester($command);
         $commandTester->execute(['command' => $command->getName(), 'name' => 'Elvis']);
     }
@@ -62,7 +63,7 @@ class DownCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new DownCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('down');
+        $command = $application->find(DirectionEnum::DOWN);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);
@@ -76,7 +77,7 @@ class DownCommandTest extends BaseCommandTest
     {
         $application = new Application();
         $application->add(new DownCommand(null, $this->parametersFromYmlFile));
-        $command = $application->find('down');
+        $command = $application->find(DirectionEnum::DOWN);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure']);

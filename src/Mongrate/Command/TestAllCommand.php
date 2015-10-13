@@ -3,6 +3,7 @@
 namespace Mongrate\Command;
 
 use Mongrate\Exception\InvalidFixturesException;
+use Mongrate\Enum\DirectionEnum;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,7 +26,7 @@ class TestAllCommand extends BaseCommand
         $command = $this->getApplication()->find('test');
 
         foreach ($migrations as $migration) {
-            foreach (['up', 'down'] as $direction) {
+            foreach (DirectionEnum::getAllValues() as $direction) {
                 $inputToSingleTestCommand = new ArrayInput([
                     'command' => 'test',
                     'name' => (string) $migration->getName(),

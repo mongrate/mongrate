@@ -3,6 +3,7 @@
 namespace Mongrate\Model;
 
 use Mongrate\Exception\InvalidDirectionException;
+use Mongrate\Enum\DirectionEnum;
 
 /**
  * Value object representing a direction -- up or down -- to take a migration.
@@ -17,48 +18,33 @@ class Direction
      */
     public function __construct($direction)
     {
-        $this->validate($direction);
+        DirectionEnum::validateValue($direction);
 
         $this->direction = $direction;
     }
 
     public static function up()
     {
-        return new Direction('up');
+        return new Direction(DirectionEnum::UP);
     }
 
     public static function down()
     {
-        return new Direction('down');
+        return new Direction(DirectionEnum::DOWN);
     }
 
     public function isUp()
     {
-        return $this->direction === 'up';
+        return $this->direction === DirectionEnum::UP;
     }
 
     public function isDown()
     {
-        return $this->direction === 'down';
+        return $this->direction === DirectionEnum::DOWN;
     }
 
     public function __toString()
     {
         return $this->direction;
-    }
-
-    /**
-     * Ensure the direction is acceptable.
-     *
-     * @throws InvalidDirectionException if the direction given is not valid.
-     */
-    private function validate($direction)
-    {
-        if ($direction !== 'up' && $direction !== 'down') {
-            throw new InvalidDirectionException(sprintf(
-                'Direction must be "up" or "down", got: %s',
-                $direction
-            ));
-        }
     }
 }
