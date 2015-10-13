@@ -8,7 +8,7 @@ class DirectionEnumTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Mongrate\Exception\InvalidDirectionException
      */
     public function testValidateValueThrowException()
     {
