@@ -3,6 +3,7 @@
 namespace Mongrate\Tests\Command;
 
 use Mongrate\Command\TestMigrationCommand;
+use Mongrate\Enum\DirectionEnum;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -34,7 +35,10 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'up']);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name' => 'UpdateAddressStructure',
+            'direction' => DirectionEnum::UP]);
         $this->assertEquals(
             "Testing UpdateAddressStructure going up.\n"
             . "Test passed.\n",
@@ -50,7 +54,10 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'UpdateAddressStructure', 'direction' => 'down']);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name' => 'UpdateAddressStructure',
+            'direction' => DirectionEnum::DOWN]);
         $this->assertEquals(
             "Testing UpdateAddressStructure going down.\n"
             . "Test passed.\n",
@@ -80,7 +87,10 @@ class TestMigrationCommandTest extends BaseCommandTest
         $commandTester = new CommandTester($command);
 
         // First run should go up.
-        $commandTester->execute(['command' => $command->getName(), 'name' => 'DeleteOldLogs', 'direction' => 'up']);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'name' => 'DeleteOldLogs',
+            'direction' => DirectionEnum::UP]);
         $this->assertEquals(
             "Testing DeleteOldLogs going up.\n"
             . "Test passed.\n",
