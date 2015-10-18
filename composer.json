@@ -25,14 +25,8 @@
     "require-dev": {
         "squizlabs/php_codesniffer": "~2.0",
         "phpunit/phpunit": "^4.7",
-        "symfony/finder": "~2.3"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "bash contrib/setup.sh"
-        ],
-        "post-update-cmd": [
-        ]
+        "symfony/finder": "~2.3",
+        "bernardosilva/git-hooks-php": "~1.0"
     },
     "config": {
         "bin-dir": "bin"
