@@ -29,6 +29,7 @@ $app->add(new \Mongrate\Command\ListCommand());
 $app->add(new \Mongrate\Command\TestMigrationCommand());
 $app->add(new \Mongrate\Command\TestAllCommand());
 $app->add(new \Mongrate\Command\UpAllCommand());
+$app->add(new \Mongrate\Command\SelfUpdateCommand());
 
 $app->setName('Mongrate migration tool');
 
