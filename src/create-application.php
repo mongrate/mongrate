@@ -21,16 +21,22 @@ $loader->registerNamespaces(array(
 $loader->register();
 
 $app = new \Symfony\Component\Console\Application();
-$app->add(new \Mongrate\Command\ToggleMigrationCommand());
-$app->add(new \Mongrate\Command\UpCommand());
-$app->add(new \Mongrate\Command\DownCommand());
-$app->add(new \Mongrate\Command\GenerateMigrationCommand());
-$app->add(new \Mongrate\Command\ListCommand());
-$app->add(new \Mongrate\Command\TestMigrationCommand());
-$app->add(new \Mongrate\Command\TestAllCommand());
-$app->add(new \Mongrate\Command\UpAllCommand());
-$app->add(new \Mongrate\Command\SelfUpdateCommand());
 
+try {
+    $app->add(new \Mongrate\Command\ToggleMigrationCommand());
+    $app->add(new \Mongrate\Command\UpCommand());
+    $app->add(new \Mongrate\Command\DownCommand());
+    $app->add(new \Mongrate\Command\GenerateMigrationCommand());
+    $app->add(new \Mongrate\Command\ListCommand());
+    $app->add(new \Mongrate\Command\TestMigrationCommand());
+    $app->add(new \Mongrate\Command\TestAllCommand());
+    $app->add(new \Mongrate\Command\UpAllCommand());
+} catch (\MongoConnectionException $e) {
+    fwrite(STDERR, "MongoDB connection failed.\n" . $e->getMessage() . "\n");
+    exit(1);
+}
+
+$app->add(new \Mongrate\Command\SelfUpdateCommand());
 $app->setName('Mongrate migration tool');
 
 if (defined('MONGRATE_VERSION')) {
