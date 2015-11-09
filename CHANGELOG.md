@@ -1,6 +1,16 @@
 Changelog
 =========
 
+**1.6.0**
+
+* Added new command, `self-update`, which updates the executable to the latest version.
+* Misc bug fixes and user experience improvements.
+* Ended official testing support for PHP 5.4.
+
+**1.5.0**
+
+* Added new command, `test-all`, which tests all migrations.
+
 **1.4.0**
 
 * The project has a new official website: http://mongrate.com/
