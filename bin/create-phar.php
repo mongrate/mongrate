@@ -53,8 +53,7 @@ foreach ($finder as $file) {
 
 $version = require_once 'src/get-version.php';
 
-$phar->addFromString('index.php', '
-    <?php
+$phar->addFromString('index.php', '<?php
     define("MONGRATE_VERSION", "' . $version . '");
     require_once "src/create-application.php";
     $app->run();
