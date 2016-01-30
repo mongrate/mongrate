@@ -6,11 +6,11 @@ Company:
         address:
             -
                 streetFirstLine: Marlow Place
-                city: Marlow
+                city: MongoDBRef(BritishCities,ccccccccccccccccccccccc1)
                 country: GB
             -
                 streetFirstLine: Watermead
-                city: Aylesbury
+                city: MongoDBRef(BritishCities,ccccccccccccccccccccccc2)
                 country: GB
     -
         # This company's address is already in the new single object format, so it
@@ -22,3 +22,11 @@ Company:
             city: London
             country: GB
             state: ~
+
+BritishCities:
+    -
+        _id: MongoId(ccccccccccccccccccccccc1)
+        name: Marlow
+    -
+        _id: MongoId(ccccccccccccccccccccccc2)
+        name: Aylesbury
