@@ -49,12 +49,21 @@ class UpdateAddressStructure
 
             $addressToUse = isset($company['address'][0]) ? $company['address'][0] : array_pop($company['address']);
 
+            if (isset($addressToUse['city'])) {
+                $addressToUse['city'] = $this->convertCityReferenceToNameString($db, $addressToUse['city']);
+            }
+
             // Convert to object instead of an array of objects.
             $collection->update(
                 ['_id' => $company['_id']],
                 ['$set' => ['address' => $addressToUse]]
             );
         }
+    }
+
+    private function convertCityReferenceToNameString(Database $db, array $reference)
+    {
+        return $db->selectCollection($reference['$ref'])->findOne(['_id' => $reference['$id']])['name'];
     }
 
     public function down(Database $db)

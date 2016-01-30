@@ -169,8 +169,9 @@ class TestMigrationCommand extends BaseCommand
 
     /**
      * Converts YML strings to native Mongo* objects. E.g. if a string is "MongoDate(123)", it will
-     * be converted to a MongoDate object representing the Unix time "123". If an array is given,
-     * this method is applied recursively to all of the array's values.
+     * be converted to a MongoDate object representing the Unix time "123", and "MongoDBRef(User,abc)"
+     * will be converted to a MongoDBRef object representing the collection 'User' and ID 'abc'.
+     * If an array is given, this method is applied recursively to all of the array's values.
      *
      * @param mixed $value
      * @return mixed
@@ -181,8 +182,13 @@ class TestMigrationCommand extends BaseCommand
             return array_map([$this, 'convertYmlStringToNativeMongoObjects'], $value);
         } elseif (is_string($value)) {
             if (preg_match(self::$matchNativeMongoClass, $value, $matches) === 1) {
-                $nativeMongoClass = 'Mongo' . $matches[1];
-                return new $nativeMongoClass($matches[2]);
+                if ($matches[1] === 'DBRef') {
+                    list($collection, $id) = explode(',', $matches[2]);
+                    return \MongoDBRef::create($collection, $id);
+                } else {
+                    $nativeMongoClass = 'Mongo' . $matches[1];
+                    return new $nativeMongoClass($matches[2]);
+                }
             }
 
             return $value;
