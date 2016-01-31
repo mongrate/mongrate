@@ -142,16 +142,28 @@ class MigrationService
     }
 
     /**
+     * @return object An instance of the migration class.
+     */
+    public function createMigrationInstance(Name $name, OutputInterface $output)
+    {
+        $this->loadMigrationClass($name);
+
+        $fullClassName = $this->generateFullClassName($name);
+        $migration = new $fullClassName();
+
+        $migration->setOutput($output);
+
+        return $migration;
+    }
+
+    /**
      * Migrate up or down.
      *
      * @param Direction $direction
      */
     public function migrate(Name $name, Direction $direction, OutputInterface $output)
     {
-        $this->loadMigrationClass($name);
-
-        $fullClassName = $this->generateFullClassName($name);
-        $migration = new $fullClassName();
+        $migration = $this->createMigrationInstance($name, $output);
 
         $output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $name . '</comment>');
 

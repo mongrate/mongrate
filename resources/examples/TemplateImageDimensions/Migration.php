@@ -33,6 +33,9 @@ class TemplateImageDimensions
 
                 list($width, $height) = getimagesize($file['fileSystemUrl']);
 
+                $log = sprintf('Got dimensions for image %s: %dx%d', $file['fileSystemUrl'], $width, $height);
+                $this->output->writeln($log);
+
                 $collection->update(
                     [
                         'id' => $template['id'],

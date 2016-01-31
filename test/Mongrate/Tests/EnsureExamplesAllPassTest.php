@@ -30,21 +30,21 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
         $this->commandTester = $commandTester;
     }
 
-    private function runGoingUp($migrationName)
+    private function runGoingUp($migrationName, $expectedLogOutput = null)
     {
-        $this->runGoingUpOrDown($migrationName, DirectionEnum::UP);
+        $this->runGoingUpOrDown($migrationName, DirectionEnum::UP, $expectedLogOutput);
     }
 
-    private function runGoingDown($migrationName)
+    private function runGoingDown($migrationName, $expectedLogOutput = null)
     {
-        $this->runGoingUpOrDown($migrationName, DirectionEnum::DOWN);
+        $this->runGoingUpOrDown($migrationName, DirectionEnum::DOWN, $expectedLogOutput);
     }
 
-    private function runGoingUpOrDown($migrationName, $direction)
+    private function runGoingUpOrDown($migrationName, $direction, $expectedLogOutput)
     {
         $this->commandTester->execute(['command' => 'test', 'name' => $migrationName, 'direction' => $direction]);
         $this->assertEquals(
-            "Testing {$migrationName} going {$direction}.\nTest passed.\n",
+            "Testing {$migrationName} going {$direction}.\n" . $expectedLogOutput . "Test passed.\n",
             $this->commandTester->getDisplay()
         );
     }
@@ -63,7 +63,10 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
 
     public function testExampleMigrationTemplateImageDimensions()
     {
-        $this->runGoingUp('TemplateImageDimensions');
+        $this->runGoingUp(
+            'TemplateImageDimensions',
+            "Got dimensions for image http://www.wearetwogether.com/images/icons/client-logo-active-brocade.png: 92x33\nGot dimensions for image http://www.wearetwogether.com/images/icons/client-logo-active-intuit.png: 69x33\n"
+        );
         $this->runGoingDown('TemplateImageDimensions');
     }
 

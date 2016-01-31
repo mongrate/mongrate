@@ -92,8 +92,7 @@ class TestMigrationCommand extends BaseCommand
 
     private function applyMigration(Name $name, Direction $direction)
     {
-        $fullClassName = 'Mongrate\Migrations\\' . $name;
-        $migration = new $fullClassName();
+        $migration = $this->service->createMigrationInstance($name, $this->output);
 
         if ($direction->isUp()) {
             $this->output->writeln('<info>Testing ' . $name . ' going up.</info>');
