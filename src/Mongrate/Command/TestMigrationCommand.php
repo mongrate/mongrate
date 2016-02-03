@@ -79,8 +79,14 @@ class TestMigrationCommand extends BaseCommand
         foreach ($fixtures as $collectionName => $collectionFixtures) {
             $collection = $this->service->selectCollection($collectionName);
 
-            // Start off with an empty collection by removing all rows with an empty query.
+            // Start off with an empty collection by removing all documents with an empty query.
             $collection->remove([]);
+
+            // Ensure there are no indexes that can prevent test input documents being inserted,
+            // e.g. there may be a uniqueness index that is being added in the migration - so
+            // we need to clean up the unique index that was added the last time the test migration
+            // command was run.
+            $collection->deleteIndexes();
 
             foreach ($collectionFixtures as $i => $collectionFixture) {
                 $collectionFixture = array_map([$this, 'convertYmlStringToNativeMongoObjects'], $collectionFixture);
