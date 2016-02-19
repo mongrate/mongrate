@@ -10,4 +10,4 @@ User:
     -
         _id: "MongoId(53f31b5ad1703ad4398b4567)"
         name: Benny
-        city: MongoDBRef(City,553a2b522fdb44fd198b458e)
+        city: MongoDBRef(City, 553a2b522fdb44fd198b458e)
