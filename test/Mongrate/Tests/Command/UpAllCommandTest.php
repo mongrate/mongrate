@@ -31,6 +31,8 @@ class UpAllCommandTest extends BaseCommandTest
             ."Migrated up\n"
             ."Migrating up... DeleteOldLogs\n"
             ."Migrated up\n"
+            ."Migrating up... RemoveBrokenReference\n"
+            ."Migrated up\n"
             ."Migrating up... TemplateImageDimensions\n"
             ."Migrated up\n"
             ."Migrating up... UpdateAddressStructure\n"
