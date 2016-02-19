@@ -75,4 +75,9 @@ class EnsureExamplesAllPassTest extends \PHPUnit_Framework_TestCase
         $this->runGoingUp('ChangeFieldAndRecordHistory');
         $this->runGoingDown('ChangeFieldAndRecordHistory');
     }
+
+    public function testExampleRemoveBrokenReference()
+    {
+        $this->runGoingUp('RemoveBrokenReference');
+    }
 }

@@ -189,6 +189,8 @@ class TestMigrationCommand extends BaseCommand
             if (preg_match(self::$matchNativeMongoClass, $value, $matches) === 1) {
                 if ($matches[1] === 'DBRef') {
                     list($collection, $id) = explode(',', $matches[2]);
+                    // Remove spaces to avoid invalid id when persisting.
+                    $id = trim($id);
                     return \MongoDBRef::create($collection, new \MongoId($id));
                 } else {
                     $nativeMongoClass = 'Mongo' . $matches[1];

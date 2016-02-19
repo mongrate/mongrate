@@ -1,0 +1,4 @@
+User:
+    -
+        name: Benny
+        city: MongoDBRef(City,553a2b522fdb44fd198b457e)
