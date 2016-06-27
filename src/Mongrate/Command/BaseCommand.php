@@ -24,8 +24,26 @@ class BaseCommand extends Command
             $params = $this->getDefaultConfigurationParams();
         }
 
-        $configuration = new Configuration($params);
-        $this->service = new MigrationService($configuration);
+        $configuration = $this->getConfiguration($params);
+        $this->service = $this->getMigrationService($configuration);
+    }
+
+    /**
+     * @param Configuration $configuration
+     * @return MigrationService
+     */
+    protected function getMigrationService(Configuration $configuration)
+    {
+        return new MigrationService($configuration);
+    }
+
+    /**
+     * @param array $params
+     * @return Configuration
+     */
+    protected function getConfiguration(array $params)
+    {
+        return new Configuration($params);
     }
 
     private function getDefaultConfigurationParams()
