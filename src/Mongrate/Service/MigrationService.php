@@ -22,6 +22,8 @@ class MigrationService
     private $configuration;
 
     /**
+     * This is set lazily - use `getDatabase()` instead of accessing this directly.
+     *
      * @var \Doctrine\MongoDB\Database
      */
     private $database;
@@ -29,7 +31,6 @@ class MigrationService
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
-        $this->setupDatabaseConnection();
     }
 
     private function setupDatabaseConnection()
@@ -65,6 +66,10 @@ class MigrationService
      */
     public function getDatabase()
     {
+        if (!$this->database) {
+            $this->setupDatabaseConnection();
+        }
+
         return $this->database;
     }
 
@@ -75,7 +80,16 @@ class MigrationService
             [],
             new DoctrineConfiguration()
         );
-        $this->database = $connection->selectDatabase($databaseName);
+
+        try {
+            $this->database = $connection->selectDatabase($databaseName);
+        } catch (\MongoConnectionException $e) {
+            $error = sprintf(
+                'Could not connect to the MongoDB server at %s',
+                str_replace('mongodb://', '', $this->configuration->getDatabaseServerUri())
+            );
+            throw new \RuntimeException($error);
+        }
     }
 
     /**
@@ -107,7 +121,7 @@ class MigrationService
      */
     public function selectCollection($collectionName)
     {
-        return $this->database->selectCollection($collectionName);
+        return $this->getDatabase()->selectCollection($collectionName);
     }
 
     /**
@@ -117,7 +131,7 @@ class MigrationService
      */
     public function getAppliedCollection()
     {
-        return $this->database->selectCollection('MongrateMigrations');
+        return $this->getDatabase()->selectCollection('MongrateMigrations');
     }
 
     /**
@@ -168,10 +182,10 @@ class MigrationService
         $output->writeln('<info>Migrating ' . $direction . '...</info> <comment>' . $name . '</comment>');
 
         if ($direction->isUp()) {
-            $migration->up($this->database);
+            $migration->up($this->getDatabase());
             $this->setMigrationApplied($name, true);
         } else {
-            $migration->down($this->database);
+            $migration->down($this->getDatabase());
             $this->setMigrationApplied($name, false);
         }
 
