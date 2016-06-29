@@ -75,21 +75,7 @@ class MigrationService
 
     public function switchToDatabase($databaseName)
     {
-        $connection = new Connection(
-            $this->configuration->getDatabaseServerUri(),
-            [],
-            new DoctrineConfiguration()
-        );
-
-        try {
-            $this->database = $connection->selectDatabase($databaseName);
-        } catch (\MongoConnectionException $e) {
-            $error = sprintf(
-                'Could not connect to the MongoDB server at %s',
-                str_replace('mongodb://', '', $this->configuration->getDatabaseServerUri())
-            );
-            throw new \RuntimeException($error);
-        }
+        $this->database = $this->initializeDatabaseConnection($databaseName);
     }
 
     /**
@@ -106,13 +92,35 @@ class MigrationService
      */
     public function getDatabaseForTestingMigration(Name $name)
     {
+        return $this->initializeDatabaseConnection('mongrate_test_' . $name);
+    }
+
+    /**
+     * @param  string $databaseName
+     * @return \Doctrine\MongoDB\Database
+     */
+    private function initializeDatabaseConnection($databaseName)
+    {
+        if (!extension_loaded('mongo')) {
+            $error = 'The mongo extension must be installed. See https://secure.php.net/manual/en/mongo.installation.php for installation instructions.';
+            throw new \RuntimeException($error);
+        }
+
         $connection = new Connection(
             $this->configuration->getDatabaseServerUri(),
             [],
             new DoctrineConfiguration()
         );
 
-        return $connection->selectDatabase('mongrate_test_' . $name);
+        try {
+            return $connection->selectDatabase($databaseName);
+        } catch (\MongoConnectionException $e) {
+            $error = sprintf(
+                'Could not connect to the MongoDB server at %s',
+                str_replace('mongodb://', '', $this->configuration->getDatabaseServerUri())
+            );
+            throw new \RuntimeException($error);
+        }
     }
 
     /**
