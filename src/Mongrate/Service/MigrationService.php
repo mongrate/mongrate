@@ -215,7 +215,9 @@ class MigrationService
 
             if ($fileName === '.'|| $fileName === '..') {
                 continue;
-            } else if (!is_dir($file->getpathName())) {
+            }
+
+            if (!is_dir($file->getPathname())) {
                 // Ignore files that might be in the migrations directory, like documentation or
                 // a .gitignore or .gitkeep file.
                 continue;

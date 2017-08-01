@@ -36,7 +36,7 @@ abstract class BaseEnum
     public static function validateValue($value)
     {
         if (!in_array($value, static::getConcreteClassValues())) {
-            throw new \InvalidArgumentException("Invalid value: ".$value);
+            throw new \InvalidArgumentException('Invalid value: ' .$value);
         }
     }
 
