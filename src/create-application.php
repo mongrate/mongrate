@@ -6,8 +6,8 @@
 
 require_once 'vendor/autoload.php';
 
-$loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
-$loader->registerNamespaces(array(
+$loader = new \Symfony\Component\ClassLoader\ClassLoader();
+$loader->addPrefixes(array(
     'Mongrate' => 'src',
 ));
 $loader->register();
