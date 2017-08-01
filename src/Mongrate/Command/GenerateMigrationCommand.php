@@ -31,15 +31,15 @@ class GenerateMigrationCommand extends BaseCommand
         $iterator = new \DirectoryIterator(__DIR__ . '/../../../resources/migration-template/');
 
         foreach ($iterator as $file) {
-            if ($file->getFileName() === '.' || $file->getFileName() === '..') {
+            if ($file->getFilename() === '.' || $file->getFilename() === '..') {
                 continue;
             }
 
-            $template = file_get_contents($file->getPathName());
+            $template = file_get_contents($file->getPathname());
             $templated = strtr($template, [
                 '%class%' => $name,
             ]);
-            file_put_contents($targetDirectory . '/' . $file->getFileName(), $templated);
+            file_put_contents($targetDirectory . '/' . $file->getFilename(), $templated);
         }
 
         $output->writeln('<info>Generated migration file and YML templates in ' . $targetDirectory  . '</info>');

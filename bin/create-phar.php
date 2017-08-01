@@ -39,9 +39,9 @@ $finder->files()
 foreach ($finder as $file) {
     // Stripping whitespace from the file reduces the Phar file size by over 50% on first test
     // (from 1.5 MB to 679 KB).
-    $minifiedPhp = php_strip_whitespace((string) $file->getPathName());
+    $minifiedPhp = php_strip_whitespace((string) $file->getPathname());
 
-    $phar->addFromString($file->getPathName(), $minifiedPhp);
+    $phar->addFromString($file->getPathname(), $minifiedPhp);
 }
 
 $finder = new Finder();
